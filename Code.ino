@@ -14,15 +14,12 @@ ESP8266WebServer server(80);
 
 
 
-void handleRoot() {//200(정상)때 출력할 함수
-  digitalWrite(led, 1);
-  server.send(200, "text/plain", "hello from esp8266!");
-  digitalWrite(led, 0);
+void handleRoot() {//200(정상)때 출력할 함수,추 후 코드작성시 여기가 메인
+  server.send(200, "text/plain", "hello from esp8266!");//OK 요청,hello from esp8266 브라우저에 출력
 }
 
 
 void handleNotFound(){//404(못 찾을시)에러때 출력할 함수
-  digitalWrite(led, 1);
   String message = "File Not Found\n\n";
   message += "URI: ";
   message += server.uri();
