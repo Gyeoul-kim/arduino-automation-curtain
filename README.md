@@ -6,7 +6,7 @@ ESP8266 and arduino mega, stepper motor will be used.
 
 ## KR
 ESP8266 모듈과 아두이노 메가, 스테퍼 모터 등을 사용합니다.
-
+![Flowchart](./Docs/Flowchart-KR.png)
 
 ## references
 
