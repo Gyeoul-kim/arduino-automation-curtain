@@ -32,12 +32,10 @@ void handleNotFound(){//404(못 찾을시)에러때 출력할 함수
     message += " " + server.argName(i) + ": " + server.arg(i) + "\n";
   }
   server.send(404, "text/plain", message);
-  digitalWrite(led, 0);
 }
 
 void setup(void){//Arduino 셋업
   pinMode(led, OUTPUT);
-  digitalWrite(led, 0);
   Serial.begin(115200);
   WiFi.begin(ssid, password);//미리 받은 ssid와 password를 이용하여 와이파이에 연결
   Serial.println("");//한줄 띄우기
@@ -59,14 +57,16 @@ void setup(void){//Arduino 셋업
     }
     //서버 설정
   server.on("/", handleRoot);// 루트로 접근 요청 받을 시 handleRoot 함수 내용 실행
-  server.on("/inline", [](){// inline으로 접근 요청 받을 시 아래의 내용 실행
-      server.send(200, "application/json", "{test: test}");
-    });
   server.onNotFound(handleNotFound);//404(못찾으면)handleNotFound 실행
   server.begin();//서버 실행
-    Serial.println("HTTP 서버 시작됨");
+    Serial.println("HTTP 서버 시작됨. 아래의 링크로 접속해 주세요.");
+    Serial.print(Wifi.localIP());
+    Serial.println(":80");
   }
 
 void loop(void){
   server.handleClient();//서버 요청 계속 받기
 }
+
+//1.스마트
+//2.
