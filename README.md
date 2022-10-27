@@ -8,7 +8,7 @@ ESP8266 and arduino, motor,Motor driver will be used.
 ESP8266 모듈과 아두이노, 모터,모터 드라이버 등을 사용합니다.
 ![Flowchart](./Docs/Flowchart-KR.png)
 
-## 작동 사진
+## working pictures(what we want to do)
 ![GIF](./Docs/curtains-opening.gif)
 > image by Geniusness / https://github.com/Geniusness/Genius-AutoCurtains
 
