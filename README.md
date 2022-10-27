@@ -2,10 +2,10 @@
 USE ESP8266 + MotorDriver + Arduino for control curtain
 
 ## EN
-ESP8266 and arduino mega, motor,Motor driver will be used.
+ESP8266 and arduino, motor,Motor driver will be used.
 
 ## KR
-ESP8266 모듈과 아두이노 메가, 모터,모터 드라이버 등을 사용합니다.
+ESP8266 모듈과 아두이노, 모터,모터 드라이버 등을 사용합니다.
 ![Flowchart](./Docs/Flowchart-KR.png)
 
 ## references
