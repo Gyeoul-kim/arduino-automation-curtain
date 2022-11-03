@@ -1,7 +1,11 @@
 # arduino curtain bot
-배재대학교 컴퓨터공학 창의공학설계 08분반 팀 31 프로젝트
+배재대학교 2022학번 AI소프트웨어공학부 컴퓨터공학전공
+창의공학설계 08분반 팀 31 프로젝트
 
-Team Project of Pai Chai University Computer Engineering, Creative Engineering Design 08 Placement
+2261030 김현우 2261031 신동원
+
+Team Project of Pai Chai University, Major of Computer Engineering
+Creative Engineering Design 08 Placement
 
 USE ESP8266 + MotorDriver + Arduino for control curtain
 
