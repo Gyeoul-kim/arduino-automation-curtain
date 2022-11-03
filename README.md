@@ -35,4 +35,5 @@ https://medium.com/kidstronics/mit-app-inventor-2-meets-esp8266-03-kidserie-fa92
 https://rasino.tistory.com/300 //앱인벤터를 이용한 ESP8266연결 개념설계 참고자료3
 
 https://kusson.tistory.com/400 //웹 인벤터 루틴기능 시간선택버튼 개념설계 참고자료
-
+ 
+https://www.hackster.io/RoboticaDIY/iot-based-digital-world-clock-using-esp8266-b5f3bd //ESP8266서버 UTC 데이터 추출 방법
