@@ -4,7 +4,7 @@
 
 2261030 김현우 2261031 신동원
 
-Team Project of Pai Chai University, Major of Computer Engineering
+Team Project of Pai Chai University, Major of Computer Engineering,
 Creative Engineering Design 08 Placement
 
 USE ESP8266 + MotorDriver + Arduino for control curtain
