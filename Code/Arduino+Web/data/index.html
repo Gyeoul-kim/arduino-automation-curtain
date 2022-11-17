@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>아두이노 커튼 조작기</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+</head>
+<body>
+  <div class="topnav">
+    <h1>Arduino Curtain Controller <i class="fas fa-cogs"></i></h1>
+  </div>
+  <div class="content">
+        <form>
+          <input type="radio" id="CW" name="direction" value="CW" checked>
+          <label for="CW">시계방향으로</label>
+          <input type="radio" id="CCW" name="direction" value="CCW">
+          <label for="CW">시계 반대방향으로</label><br><br><br>
+          <label for="steps"> 얼마나?:</label>
+          <input type="range" id="steps" name="steps" min="0" oninput="rangeout.value=this.value" max="100" step="5"> <output name="rangeout" for="steps">4096</output>
+        </form>
+        <button class="GoButton" onclick="submitForm()">GO!</button><button class="StopButton" onclick="submitForm()">STOP!</button>
+        <p>모터 상태: <span id="motor-state">멈춤</span></p>
+        <p><i id="gear" class="fas fa-cog"></i> </p>
+
+  </div>
+</body>
+<script src="script.js"></script>
+</html>
