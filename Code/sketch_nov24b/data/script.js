@@ -46,24 +46,16 @@ function submitForm(){
         document.getElementById("gear").classList.add("spin-back");
     }
     
-    websocket.send(123+"&"+direction);
+    websocket.send(1234+"&"+direction);
 }
 
 function closeForm(){
-    const rbs = document.querySelectorAll('input[name="direction"]');
-    direction;
-    for (const rb of rbs) {
-        if (rb.checked) {
-            direction = rb.value;
-            break;
-        }
-    }
+    direction = "stop";
     document.getElementById("motor-state").innerHTML = "커튼 멈춤"
     document.getElementById("motor-state").style.color = "red";
     document.getElementById("gear").classList.remove("spin", "spin-back");
     document.getElementById("gear").classList.remove("spin");
-    var speed = document.getElementById("Speed").value;
-    websocket.send(speed+"&"+direction);
+    websocket.send(1234+"&"+direction);
 }
 
 function onMessage(event) {
