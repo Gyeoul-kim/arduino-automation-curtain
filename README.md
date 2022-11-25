@@ -24,14 +24,26 @@ ESP8266 모듈과 아두이노, 모터,모터 드라이버 등을 사용합니�
 > image by Geniusness / https://github.com/Geniusness/Genius-AutoCurtains
 ## references
 
-https://github.com/Geniusness/Genius-AutoCurtains
+https://github.com/Geniusness/Genius-AutoCurtains //프로젝트 개념설계 참고자료
 
-https://github.com/CemraJC/smart-autocurtains
+https://github.com/CemraJC/smart-autocurtains 
 
-https://randomnerdtutorials.com/stepper-motor-esp8266-websocket/
+https://randomnerdtutorials.com/stepper-motor-esp8266-websocket/ //ESP8266 모터조작
 
-https://create.arduino.cc/projecthub/abdullahsadiq/lightly-smarter-lighting-4052ec?ref=search&ref_id=curtain&offset=1
+https://diyver.tistory.com/125 //ESP8266서버 생성과 Wi-fi연결
 
-https://diyver.tistory.com/125
+https://blog.naver.com/speedprinse/221388363130 //앱인벤터를 이용한 ESP8266연결 개념설계 참고자료
 
-https://blog.naver.com/speedprinse/221388363130
+https://medium.com/kidstronics/mit-app-inventor-2-meets-esp8266-03-kidserie-fa92cc8ae8a2 //앱인벤터를 이용한 ESP8266연결 개념설계 참고자료2
+
+https://rasino.tistory.com/300 //앱인벤터를 이용한 ESP8266연결 개념설계 참고자료3
+
+https://www.youtube.com/watch?v=_Ugw-8EPOa8 //앱인벤터를 이용한 ESP8266연결 개념설계 참고자료4
+
+https://devicemart.blogspot.com/2019/05/4-iot-wifi-app-inventor-3.html //앱인벤터를 이용한 ESP8266연결 개념설계 참고자료5
+
+https://kusson.tistory.com/400 //웹 인벤터 루틴기능 시간선택버튼 개념설계 참고자료
+ 
+https://www.hackster.io/RoboticaDIY/iot-based-digital-world-clock-using-esp8266-b5f3bd //ESP8266서버 UTC 데이터 추출 방법
+
+
