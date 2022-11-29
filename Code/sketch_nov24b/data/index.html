@@ -2,14 +2,14 @@
 <html>
 <head>
   <title>아두이노 커튼 조작기</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1" charset="utf-8">
   <link rel="stylesheet" type="text/css" href="style.css">
   <link rel="icon" type="image/png" href="favicon.png">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 </head>
 <body>
   <div class="topnav">
-    <h1>Arduino Curtain Controller <i class="fas fa-cogs"></i></h1>
+    <h1>아두이노 커튼 리모컨 <i class="fas fa-cogs"></i></h1>
   </div>
   <div class="content">
     <form>
@@ -20,15 +20,17 @@
         <input type="radio" id="CCW" name="direction" value="CLOSE">
         <label for="CW">닫기</label><br><br><br>
       </p>
+      <p>속도 지정</p>
+      <p>
+        <button class="step1" type="button" onclick="speed1()">25%</button><button class="step1" type="button" onclick="speed2()">50%</button><button class="step1"type="button"  onclick="speed3()">75%</button><button class="step1" type="button" onclick="speed4()">100%</button>
+      </p>
 
       <p>모터 상태: <span id="motor-state">커튼 멈춤</span></p>
       <p><i id="gear" class="fas fa-cog"></i> </p>
     </form>
-    <button class="GoButton" onclick="submitForm()">GO!</button><button class="StopButton" onclick="closeForm()">STOP!</button>
-
-    
-
+    <button class="GoButton" onclick="submitForm()">GO!</button>
   </div>
+  <p>console<span id="console"></span></p>
 
 </body>
 <script src="script.js"></script>

@@ -52,12 +52,30 @@ form{
   font-size: 20px;
   border-radius: 4px;
   transition-duration: 0.4s;
-  width: 50%;
+  width: 100%;
   color: white;
   cursor: pointer;
 }
 
 .GoButton:hover {
+    background-color: #1282A2;
+}
+
+.step1 {
+  background-color: #034078;
+  border: none;
+  padding: 14px 20px;
+  text-align: center;
+  font-size: 15px;
+  border-radius: 4px;
+  transition-duration: 0.4s;
+  width: 24%;
+  margin-right: 1px;
+  color: white;
+  cursor: pointer;
+}
+
+.step1:hover {
     background-color: #1282A2;
 }
 

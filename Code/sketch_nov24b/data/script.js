@@ -2,7 +2,8 @@ var gateway = `ws://${window.location.hostname}/ws`;
 var websocket;
 window.addEventListener('load', onload);
 var direction;
-var speed;
+var step=1;
+var speed=1;
 
 function onload(event) {
     initWebSocket();
@@ -45,8 +46,8 @@ function submitForm(){
     else{
         document.getElementById("gear").classList.add("spin-back");
     }
-    
-    websocket.send(1234+"&"+direction);
+    websocket.send(speed+"&"+direction);
+
 }
 
 function closeForm(){
@@ -55,11 +56,24 @@ function closeForm(){
     document.getElementById("motor-state").style.color = "red";
     document.getElementById("gear").classList.remove("spin", "spin-back");
     document.getElementById("gear").classList.remove("spin");
-    websocket.send(1234+"&"+direction);
+    websocket.send(0+"&"+direction);
 }
 
+function speed1(){
+    speed=4;
+}
+function speed2(){
+    speed=2;
+}
+function speed3(){
+    speed=3;
+}
+function speed4(){
+    speed=1;
+}
 function onMessage(event) {
     console.log(event.data);
+    
     direction = event.data;
     if (direction=="stop"){ 
       document.getElementById("motor-state").innerHTML = "커튼 멈춤"

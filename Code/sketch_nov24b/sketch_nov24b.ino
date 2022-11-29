@@ -1,3 +1,5 @@
+
+
 /*
   Rui Santos
   Complete project details at https://RandomNerdTutorials.com/stepper-motor-esp8266-websocket/
@@ -9,23 +11,29 @@
   copies or substantial portions of the Software.
 */
 
+
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
 #include <ESPAsyncWebServer.h>
 #include "LittleFS.h"
-#include <Stepper.h>
+#include <AccelStepper.h>
+#include <MultiStepper.h>
+#define IN1 5
+#define IN2 4
+#define IN3 14
+#define IN4 12
 
-#define IN1 D5
-#define IN2 D6
-#define IN3 D7
-#define IN4 D8
-Stepper stepper(2048, IN4, IN2, IN3, IN1);
+AccelStepper stepper(AccelStepper::HALF4WIRE, IN1, IN3, IN2, IN4);
 
 String message = "";
 
 // Replace with your network credentials
+/*
 const char* ssid = "2261030";
 const char* password = "luinesuki";
+*/
+const char* ssid = "SK_WiFiGIGA2BA4_2.4G";
+const char* password = "1701000060";
 
 // Create AsyncWebServer object on port 80
 AsyncWebServer server(80);
@@ -36,6 +44,8 @@ AsyncWebSocket ws("/ws");
 //Variables to save values from HTML form
 String direction ="STOP";
 int steps=2048;
+String Speed;
+int speedy;
 
 bool notifyStop = false;
 
@@ -70,32 +80,37 @@ void handleWebSocketMessage(void *arg, uint8_t *data, size_t len) {
   if (info->final && info->index == 0 && info->len == len && info->opcode == WS_TEXT) {
     data[len] = 0;
     message = (char*)data;
+    Speed = message.substring(0, message.indexOf("&"));
+    Speed.replace("'","");
     direction = message.substring(message.indexOf("&")+1, message.length());
-    Serial.print("direction");
+    direction.replace("'","");
+    Serial.print("value :");
+    Serial.println(message);
+    Serial.println(Speed);
     Serial.println(direction);
     notifyClients(direction);
     notifyStop = true;
-    
+    steps=2048;
+    speedy=1000/Speed.toInt();
     if (direction == "OPN"){
         ESP.wdtDisable();
-        stepper.setSpeed(20);
-        stepper.step(steps);
-        if(direction=="stop"){
-          stepper.stop();
-        }
+        stepper.move(steps);
         Serial.print("OPN");
         delay(5000);
         ESP.wdtEnable(5600);
     }
     else if(direction=="CLOSE"){
       ESP.wdtDisable();
-      stepper.setSpeed(20);
-      stepper.step(-steps);
+      stepper.move(-steps);
       Serial.print("CLOSE");
       delay(5000);
       ESP.wdtEnable(5600);
     }else if(direction=="stop"){
+      ESP.wdtDisable();
       stepper.stop();
+      Serial.print("STOP");
+      delay(5000);
+      ESP.wdtEnable(5600);
     }
   }
 }
@@ -131,6 +146,8 @@ void setup() {
   initWiFi();
   initWebSocket();
   initFS();
+  
+  stepper.setAcceleration(1000);
 
   // Web Server Root URL
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
@@ -148,8 +165,7 @@ void loop() {
     notifyClients(direction);
     notifyStop = false;
   }
-  if(direction=="stop"){
-        stepper.stop();
-      }
   ws.cleanupClients();
+  stepper.setMaxSpeed(speedy);
+  stepper.run();
 }
