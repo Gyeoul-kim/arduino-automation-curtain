@@ -20,13 +20,12 @@ char *substr(int s,int e,char *str);//배열용 substring for c ref by codingdog
 char *message = "";//스트링 초기화.
 
 // Wifi SSID & PASSWORD
-/*
 const char* ssid = "2261030";
 const char* password = "luinesuki";
-*/
+/*
 const char* ssid = "SK_WiFiGIGA2BA4_2.4G";//상수로 SSID 지정.
 const char* password = "1701000060";//상수로 PASSWORD 기록(보안에는 안좋음)
-
+*/
 // Create AsyncWebServer object on port 80
 AsyncWebServer server(80);//웹서버 오브젝트 생성.
 
@@ -34,7 +33,7 @@ AsyncWebServer server(80);//웹서버 오브젝트 생성.
 AsyncWebSocket ws("/ws");//웹소켓 오브젝트 생성.
 
 //Variables to save values from HTML form
-char *direction="STP";//기본 상태를 정지로 지정.
+char *Direction="STP";//기본 상태를 정지로 지정.
 
 int steps=2048;//스텝(회전)을 2048(한바퀴)로 설정.
 char *Speed;//Websocket 방식으로 받은 속도 저장 목적.
@@ -111,27 +110,28 @@ void handleWebSocketMessage(void *arg, uint8_t *data, size_t len) {//웹소켓 �
     if(!isRoutineI==1){//isRoutineI가 1이 아니라면.
       Speed = substr(0,0,message);//message에서 & 앞의 문자 추출
       //Speed = message.substring(0, message.indexOf("&"));
-      direction = substr(2,4,message);//& 뒤의 문자를 추출.
+      Direction = substr(2,4,message);//& 뒤의 문자를 추출.
       //direction = message.substring(message.indexOf("&")+1,5);
       Serial.println(message);//표시
       Serial.println(Speed);
-      Serial.println(direction);
+      Serial.println(Direction);
       steps=2048;//한바퀴(추 후 기기설치 후 조정 예정.)
-      i_speed=1000/(int)Speed;//최대 속도는 1000. 넘길 시에는 완~전 느리게 동작할 수 있다고 공식 문서에서 밝힘.WS Packet에서 추출한 숫자로 나누어 작동. 1,2,3
-      if (strcmp(direction,"OPN")==0){//입력받은 string 이 OPN이면
+      i_speed=1000/atoi(Speed);//최대 속도는 1000. 넘길 시에는 완~전 느리게 동작할 수 있다고 공식 문서에서 밝힘.WS Packet에서 추출한 숫자로 나누어 작동. 1,2,3
+      Serial.println(i_speed);
+      if (strcmp(Direction,"OPN")==0){//입력받은 string 이 OPN이면
         ESP.wdtDisable();//딜레이 사용시 와치독 켜져 뻗어버리는 문제 발생.
         stepper.move(steps);//스텝수만큼 회전.
         Serial.print("Opened");//열었다고 시리얼에 표시
         delay(5000);//5초 대기
         ESP.wdtEnable(5600);//작동 후 다시 켜줌.
         }
-        else if(strcmp(direction=="CLS")==0){//입력받은 string이 CLS라면
+        else if(strcmp(Direction,"CLS")==0){//입력받은 string이 CLS라면
           ESP.wdtDisable();//와치독 임시 비활성화.
           stepper.move(-steps);//역방향으로 한바퀴 회전.
           Serial.print("CLOSE");//닫았다고 표시.
           delay(5000);//5초 대기.
           ESP.wdtEnable(5600);//다시 와치독 활성화.
-          }else if(direction=="STP"){//입력받은 string이 STP라면
+          }else if(Direction,"STP"){//입력받은 string이 STP라면
             ESP.wdtDisable();//와치독 비활성화
           stepper.stop();//모터 정지(거의 바로 정지함.)
           Serial.print("STOP");//시리얼에 정지했다고 표시.
@@ -150,42 +150,41 @@ void handleWebSocketMessage(void *arg, uint8_t *data, size_t len) {//웹소켓 �
       Serial.println(SRO_Min);
       Serial.println(SRC_Hour);
       Serial.println(SRC_Min);
-      TimeRoutine();//루틴 함수 시작.
+      //TimeRoutine();//루틴 함수 시작.
     }
-    /*
-    notifyClients(direction);//브라우저(클라이언트)에 방향 표시.
+    notifyClients(Direction);//브라우저(클라이언트)에 방향 표시.
     notifyStop = true;//함수 트루로
-    */
   }
 }
 void TimeRoutine(){//루틴 함수.
   /*
-  RC_Hour=SRC_Hour.toInt(); RC_Min=SRC_Min.toInt();
-  RO_Hour=SRO_Hour.toInt(); RO_Min=SRO_Min.toInt();
-  */
-
-  /*strcmp = 스트링 비교 함수 (string Compare, 같으면 0 다르면 -1 출력)
-   * 근데 계속 돌아서 Watchdog Reset 가능성 있는..
-   * 다른 방법 없나 조건 미충족시에..
+    RC_Hour=SRC_Hour.toInt(); RC_Min=SRC_Min.toInt();
+    RO_Hour=SRO_Hour.toInt(); RO_Min=SRO_Min.toInt();
   */
   /*
-  if((RO_Hour==C_Hour)&&(RO_Min==C_Min)){
-    direction = "OPN";
-  }else if((RC_Hour==C_Hour)&&(RC_Min==C_Min)){
-    direction = "CLS";
-  }else{
-    TimeRoutine();
-    
-  }
-  */if((strcmp(SRO_Hour,SC_Hour)==0)&&(strcmp(SRO_Min,SC_Min)==0)){//만약 여는시간과 시스템 시간이 일치한다면
-    direction = "OPN";//열기
+    strcmp = 스트링 비교 함수 (string Compare, 같으면 0 다르면 -1 출력)
+    * 근데 계속 돌아서 Watchdog Reset 가능성 있는..
+    * 다른 방법 없나 조건 미충족시에..
+  */
+  /*
+    if((RO_Hour==C_Hour)&&(RO_Min==C_Min)){
+      direction = "OPN";
+    }else if((RC_Hour==C_Hour)&&(RC_Min==C_Min)){
+      direction = "CLS";
+    }else{
+      TimeRoutine();
+      
+    }
+  */
+  if((strcmp(SRO_Hour,SC_Hour)==0)&&(strcmp(SRO_Min,SC_Min)==0)){//만약 여는시간과 시스템 시간이 일치한다면
+    Direction = "OPN";//열기
   }else if((strcmp(SRC_Hour,SC_Hour)==0)&&(strcmp(SRC_Min,SC_Min)==0)){//아니라면 닫는 시간과 시스템 시간이 일치한다면
-    direction = "CLS";//닫기
+    Direction = "CLS";//닫기
   }else{//그것도 아니라면.
-    
     TimeRoutine();//다시 루틴 돌리기.
   }
 }
+
 
 void SetCurrentTime(){//현재시간 지정
   
@@ -203,7 +202,7 @@ void onEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType 
   switch (type) {//웹소켓 이벤트 타입에 따라 스위치 돌리기.
     case WS_EVT_CONNECT://웹소켓 연결되면
       Serial.printf("WebSocket client #%u connected from %s\n", client->id(), client->remoteIP().toString().c_str());//어..시리얼에 출력(id,아이피,원격 아이피)
-      notifyClients(direction);//방향 클라이언트에 전송
+      notifyClients(Direction);//방향 클라이언트에 전송
       break;//탈출
     case WS_EVT_DISCONNECT://연결 끊기면
       Serial.printf("WebSocket client #%u disconnected\n", client->id());//끊겼다고 시리얼ㅊ에 출력
@@ -229,7 +228,7 @@ void setup() {
   initWiFi();//와이파이온
   initWebSocket();//웹소켓 온
   initFS();//FS 온
-  stepper.setAcceleration(1000);//가감속력 설정, 1000이면 거~의 즉각적 정지.
+  stepper.setAcceleration(100);//가감속력 설정, 1000이면 거~의 즉각적 정지.
 
   // Web Server Root URL
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){//루트로 요청하면
@@ -240,16 +239,19 @@ void setup() {
   server.begin();//서버 완전히 온
   }
 
+
+
+
 void loop() {
   if (notifyStop == true){ //만약 스탑이 트루면
-    direction = "STP";//방향 스탑
-    notifyClients(direction);//클라에 방향 전달
+    Direction = "STP";//방향 스탑
+    notifyClients(Direction);//클라에 방향 전달
     notifyStop = false;//스탑 폴스로
   }
   ws.cleanupClients();//클린업!
   stepper.setMaxSpeed(i_speed);//속도 맥시멈 지정. 위에서 변경한대로.
   stepper.run(); //굴릴려면 루프에서 불러야
   timeClient.update();//시간 서버에서 받아오기
-  //SetCurrentTime();//변수에 지정.
+  SetCurrentTime();//변수에 지정.
   }
   
