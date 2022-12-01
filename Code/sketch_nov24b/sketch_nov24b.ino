@@ -88,12 +88,12 @@ void notifyClients(char *state) {//클라이언트에 신호 전송
   ws.textAll(state);//받은거 그대로 웹소켓 통해 클라이언트로 전송.
 }
 
-char *substr(int star,int en,char *str){
+char *substr(int star,int en,char *str){//Substring 기능 구현
 
-  char *niew = (char *)malloc(sizeof(char)*(en-star+2));
-  strncpy(niew,str+star,en-star+1);
-  niew[en-star+1]=0;
-  return niew;
+  char *niew = (char *)malloc(sizeof(char)*(en-star+2));//niew 차형 포인터 선언해서 en-star+2한 만큼 동적으로 지정
+  strncpy(niew,str+star,en-star+1);//입력받은 스트링(niew)에서 str+star부터 en-star+1만큼 복사
+  niew[en-star+1]=0;//niew 마지막에 널문자 추가.
+  return niew;//niew 값 돌려보내기.
 }
 void handleWebSocketMessage(void *arg, uint8_t *data, size_t len) {//웹소켓 메시지 해독
   AwsFrameInfo *info = (AwsFrameInfo*)arg;
@@ -118,14 +118,14 @@ void handleWebSocketMessage(void *arg, uint8_t *data, size_t len) {//웹소켓 �
       Serial.println(direction);
       steps=2048;//한바퀴(추 후 기기설치 후 조정 예정.)
       i_speed=1000/(int)Speed;//최대 속도는 1000. 넘길 시에는 완~전 느리게 동작할 수 있다고 공식 문서에서 밝힘.WS Packet에서 추출한 숫자로 나누어 작동. 1,2,3
-      if (direction == "OPN"){//입력받은 string 이 OPN이면
+      if (strcmp(direction,"OPN")==0){//입력받은 string 이 OPN이면
         ESP.wdtDisable();//딜레이 사용시 와치독 켜져 뻗어버리는 문제 발생.
         stepper.move(steps);//스텝수만큼 회전.
         Serial.print("Opened");//열었다고 시리얼에 표시
         delay(5000);//5초 대기
         ESP.wdtEnable(5600);//작동 후 다시 켜줌.
         }
-        else if(direction=="CLS"){//입력받은 string이 CLS라면
+        else if(strcmp(direction=="CLS")==0){//입력받은 string이 CLS라면
           ESP.wdtDisable();//와치독 임시 비활성화.
           stepper.move(-steps);//역방향으로 한바퀴 회전.
           Serial.print("CLOSE");//닫았다고 표시.
@@ -177,9 +177,9 @@ void TimeRoutine(){//루틴 함수.
     TimeRoutine();
     
   }
-  */if((SRO_Hour==SC_Hour)&&(SRO_Min==SC_Min)){//만약 여는시간과 시스템 시간이 일치한다면
+  */if((strcmp(SRO_Hour,SC_Hour)==0)&&(strcmp(SRO_Min,SC_Min)==0)){//만약 여는시간과 시스템 시간이 일치한다면
     direction = "OPN";//열기
-  }else if((SRC_Hour=SC_Hour)&&(SRC_Min==SC_Min)){//아니라면 닫는 시간과 시스템 시간이 일치한다면
+  }else if((strcmp(SRC_Hour,SC_Hour)==0)&&(strcmp(SRC_Min,SC_Min)==0)){//아니라면 닫는 시간과 시스템 시간이 일치한다면
     direction = "CLS";//닫기
   }else{//그것도 아니라면.
     
