@@ -1,20 +1,40 @@
 # arduino curtain bot
-배재대학교 2022학번 AI소프트웨어공학부 컴퓨터공학전공
-창의공학설계 08분반 팀 31 프로젝트
-
-2261030 김현우 2261031 신동원
-
-Team Project of Pai Chai University, Major of Computer Engineering,
-Creative Engineering Design 08 Placement
-
-USE ESP8266 + MotorDriver + Arduino for control curtain
-
-## EN
-ESP8266 and arduino, motor,Motor driver will be used.
 
 ## KR
-ESP8266 모듈과 아두이노, 모터,모터 드라이버 등을 사용합니다.
-![Flowchart](./Docs/Flowchart-KR.png)
+배재대학교 2022학번 AI소프트웨어공학부 컴퓨터공학전공
+창의공학설계 08분반 팀 31 프로젝트
+2261030 김현우 2261031 신동원
+   
+## EN
+Team Project of Pai Chai University, Major of Computer Engineering   
+Creative Engineering Design 08 Placement   
+
+## 프로잭트 소개
+>Wi-Fi통신으로 커튼을 조작 할 수 있는 장치
+>  >조작 명령을 위한 앱 개발   
+>  >루틴 기능 아두이노 코드 개발   
+>  >Wi-Fi통신 코드 개발   
+>  >동작 속도 단계 조절 코드 개발   
+>  >동작 정지 기능 코드 개발
+
+## Project Introduction
+>A device that can manipulate curtains with Wi-Fi communication   
+>  >Develop apps for manipulation commands   
+>  >Development of routine function to Arduino code
+>  >Development of Wi-Fi Communication Code   
+>  >Development of a speed control code   
+>  >Development of Stop Function Code
+
+## 핵심재료
+**ESP 8266 NODE V3**   
+**28BYJ-48 스텝 모터**   
+**ULN2003 모터 드라이버 모듈**   
+
+## Main Parts List
+**ESP 8266 NODE V3**   
+**28BYJ-48 Stepper Motor**   
+**ULN2003 Motor Driver Module**   
+
 
 ## working pictures(what we want to do)
 ![GIF](./Docs/curtains-opening.gif)
