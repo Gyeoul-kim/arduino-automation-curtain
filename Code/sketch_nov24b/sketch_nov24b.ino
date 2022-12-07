@@ -18,15 +18,15 @@ char *substr(int s, int e, char *str); //배열용 substring for c ref by coding
 char *message = "";//스트링 초기화.
 
 // Wifi SSID & PASSWORD
-/*
+
   const char* ssid = "2261030";
   const char* password = "luinesuki";
+/*
+const char* ssid = "SMART PCU";//상수로 SSID 지정.
+const char* password = "";//상수로 PASSWORD 기록(보안에는 안좋음)
 */
-const char* ssid = "SK_WiFiGIGA2BA4_2.4G";//상수로 SSID 지정.
-const char* password = "1701000060";//상수로 PASSWORD 기록(보안에는 안좋음)
-
 // Create AsyncWebServer object on port 80
-AsyncWebServer server(80);//웹서버 오브젝트 생성.
+AsyncWebServer server(81);//웹서버 오브젝트 생성.
 
 // Create a WebSocket object
 AsyncWebSocket ws("/ws");//웹소켓 오브젝트 생성.
@@ -43,10 +43,10 @@ bool notifyStop = false;//정지 알림 Default로 false 설정
 //Variable for Routine Function.
 
 char *SRO_Hour = ""; char *SRO_Min = "";  char *SRC_Hour = ""; char *SRC_Min = ""; //스트링 형태로 시간 저장.(R=Remote,앱에서 지정한 시간)
-char *isRoutine = ""; int isRoutineI; //루틴 지정 여부 체크용
+char *isTrigger = ""; int isTriggerI; //루틴 지정 여부 체크용
 
-char *SC_Hour = ""; char *SC_Min = ""; char *C_Time = ""; String SC_Time = ""; //기기 시간 String형. 
-int C_Hour; int C_Min;
+char *SC_Hour = ""; char *SC_Min = ""; char *SC_Sec; char *C_Time = ""; String SC_Time = ""; //기기 시간 String형. 
+int C_Hour; int C_Min; int C_Sec;
 
 //Get time from Timeserver
 
@@ -94,52 +94,78 @@ void handleWebSocketMessage(void *arg, uint8_t *data, size_t len) {//웹소켓 �
   if (info->final && info->index == 0 && info->len == len && info->opcode == WS_TEXT) {
     data[len] = 0;//형식은 /DOCS내 이미지 참고.
     message = (char*)data;//웹소켓 메시지를 캐릭터 포인터형으로 변환하여 message 문자열에 넣기
-    isRoutine = substr(18, 18, message); //맨 마지막 숫자를 isRoutine 에 저장.
-    isRoutineI = atoi(isRoutine); //if문 통한 비교를 위해 int형으로 변환
+    isTrigger = substr(18, 18, message); //맨 마지막 숫자를 isTrigger 에 저장.
+    isTriggerI = atoi(isTrigger); //if문 통한 비교를 위해 int형으로 변환
     Serial.print("value :");
-    Serial.println(isRoutine);
-    if (!isRoutineI == 1) { //isRoutineI가 1이 아니라면.
-      Speed = substr(0, 0, message); //message에서 & 앞의 문자 추출
-      Direction = substr(2, 4, message); //& 뒤의 문자를 추출.
-      Serial.println(message);//표시
-      Serial.println(Speed);
-      Serial.println(Direction);
-      steps = 8192;
-      i_speed = 1000 / atoi(Speed);
-      Serial.println(i_speed);
-      if (strcmp(Direction, "OPN") == 0) { //입력받은 string 이 OPN이면
-        ESP.wdtDisable();//딜레이 사용시 와치독 켜져 뻗어버리는 문제 발생.
-        stepper.move(steps);//스텝수만큼 회전.
-        Serial.print("Opened");//열었다고 시리얼에 표시
-        delay(5000);//5초 대기
-        ESP.wdtEnable(5600);//작동 후 다시 켜줌.
-      } else if (strcmp(Direction, "CLS") == 0) { //입력받은 string이 CLS라면
-        ESP.wdtDisable();//와치독 임시 비활성화.
-        stepper.move(-steps);//역방향으로 한바퀴 회전.
-        Serial.print("CLOSE");//닫았다고 표시.
-        delay(5000);//5초 대기.
-        ESP.wdtEnable(5600);//다시 와치독 활성화.
-      } else { //입력받은 string이 STP라면
-        ESP.wdtDisable();//와치독 비활성화
-        stepper.stop();//모터 정지(거의 바로 정지함.)
-        Serial.print("STOP");//시리얼에 정지했다고 표시.
-        delay(5000);//5초 대기
-        ESP.wdtEnable(5600);//다시 와치독 킴.
-      }
-    } else { //아니라면(isRoutineI가 1이라면)
-      //SRO_Hour = message.substring(message.indexOf("&")+5,8);
-      SRO_Hour = substr(6, 7, message); //여는시각의 시를 추출함.
-      SRO_Min = substr(9, 10, message); //여는시각의 분을 추출함.
-      SRC_Hour = substr(12, 13, message); //닫는시간의 시를 추출함.
-      SRC_Min = substr(15, 16, message); //닫는시간의 분을 추출함.
-      Serial.println(SRO_Hour);//표시
-      Serial.println(SRO_Min);
-      Serial.println(SRC_Hour);
-      Serial.println(SRC_Min);
-      //TimeRoutine();//루틴 함수 시작.
+    Serial.println(message);
+    switch(isTriggerI){
+      case(1)://모터 가동
+        Speed = substr(0, 0, message); //message에서 & 앞의 문자 추출
+        Direction = substr(2, 4, message); //& 뒤의 문자를 추출.
+        Serial.println(message);//표시
+        Serial.println(Speed);
+        Serial.println(Direction);
+        steps = 8192;
+      
+        switch (atoi(Speed)) {
+          case(1):
+          i_speed = 300;
+          break;
+          case(2):
+          i_speed = 600;
+          break;
+          case(3):
+          i_speed = 900;
+          break;
+        }
+        Serial.println(i_speed);
+        if (strcmp(Direction, "OPN") == 0) { //입력받은 string 이 OPN이면
+          notifyClients(Direction);
+          ESP.wdtDisable();//딜레이 사용시 와치독 켜져 뻗어버리는 문제 발생.
+          stepper.move(steps);//스텝수만큼 회전.
+          Serial.print("Opened");//열었다고 시리얼에 표시
+          delay(5000);//5초 대기
+          ESP.wdtEnable(5600);//작동 후 다시 켜줌.
+          Direction="STP";
+          notifyClients(Direction);
+        } else if (strcmp(Direction, "CLS") == 0) { //입력받은 string이 CLS라면
+          notifyClients(Direction);
+          ESP.wdtDisable();//와치독 임시 비활성화.
+          stepper.move(-steps);//역방향으로 한바퀴 회전.
+          Serial.print("CLOSE");//닫았다고 표시.
+          delay(5000);//5초 대기.
+          ESP.wdtEnable(5600);//다시 와치독 활성화.
+          Direction="STP";
+          notifyClients(Direction);
+        } else { //입력받은 string이 STP라면
+          notifyClients(Direction);
+          ESP.wdtDisable();//와치독 비활성화
+          stepper.stop();//모터 정지(거의 바로 정지함.)
+          Serial.print("STOP");//시리얼에 정지했다고 표시.
+          delay(5000);//5초 대기
+          ESP.wdtEnable(5600);//다시 와치독 킴.
+          Direction="STP";
+          notifyClients(Direction);
+        }
+
+        break;
+      case(2)://루틴 가동
+        SRO_Hour = substr(6, 7, message); //여는시각의 시를 추출함.
+        SRO_Min = substr(9, 10, message); //여는시각의 분을 추출함.
+        SRC_Hour = substr(12, 13, message); //닫는시간의 시를 추출함.
+        SRC_Min = substr(15, 16, message); //닫는시간의 분을 추출함.
+        Serial.println(SRO_Hour);//표시
+        Serial.println(SRO_Min);
+        Serial.println(SRC_Hour);
+        Serial.println(SRC_Min);
+        //TimeRoutine();//루틴 함수 시작.
+        break;
+      case(3)://첫 시간 설정
+        SC_Hour=substr(6,7,message);
+        SC_Min=substr(9,10,message);
+        SC_Sec=0;
+        break;
     }
-    notifyClients(Direction);//브라우저(클라이언트)에 방향 표시.
-    notifyStop = true;//함수 트루로
   }
 }
 void TimeRoutine() { //루틴 함수.
@@ -159,17 +185,20 @@ void TimeRoutine() { //루틴 함수.
   }
 }
 
-
-void SetCurrentTimeNetwork() { //현재시간 지정
-
-  SC_Time.toCharArray(C_Time, SC_Time.length() + 2);
-  SC_Hour = substr(17, 18, C_Time); //여는시각의 시를 추출함.
-  SC_Min = substr(20, 21, C_Time); //여는시각의 분을 추출함.
-  //Serial.println(SC_Hour);
-  C_Hour = atoi(SC_Hour);
-  C_Min = atoi(SC_Min);
+void Clocker(){
+  delay(1000);
+  C_Sec=C_Sec+1;
+  if(C_Sec==60){
+    C_Sec=0;
+    C_Min=C_Min+1;
+  }
+  if(C_Min==60){
+    C_Min=0;
+    C_Hour=C_Hour+1;
+  }if(C_Hour==24){
+    C_Hour=0;
+  }
 }
-
 void onEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType type, void *arg, uint8_t *data, size_t len) {//여기는 진짜 모르겠다 ㅎㅎㅎ
   switch (type) {//웹소켓 이벤트 타입에 따라 스위치 돌리기.
     case WS_EVT_CONNECT://웹소켓 연결되면
@@ -206,48 +235,6 @@ void setup() {
   server.serveStatic("/", LittleFS, "/");//고정!
   server.begin();//서버 완전히 온
   stepper.setAcceleration(1000);//가감속력 설정, 1000이면 거~의 즉각적 정지.
-  getTime();
-  SetCurrentTimeNetwork();//변수에 지정.
-}
-void UpdateCurrentHour(){
-  delay(60000*60);
-  C_Hour++;
-  
- 
-}
-void UpdateCurrentMin(){
-  delay(60000);
-  C_Min++;
-  
- 
-}
-void getTime() {
-  WiFiClient client;
-  while (!!!client.connect("google.com", 80)) { //  google.com 연결 안되면, !!! 또는 ! 는 부울
-    Serial.println("connection failed, retrying...");
-  }
-
-  client.print("HEAD / HTTP/1.1\r\n\r\n"); // google.com 에 접속해서 헤더파일 받아오는 명령어?
-
-  while (!!!client.available()) {} // !!! 또는 ! 는 부울
-
-  while (client.available()) {
-    if (client.read() == '\n') {
-      if (client.read() == 'D') {
-        if (client.read() == 'a') {
-          if (client.read() == 't') {
-            if (client.read() == 'e') {
-              if (client.read() == ':') {
-                client.read();
-                SC_Time = client.readStringUntil('\r');
-                client.stop();
-              }
-            }
-          }
-        }
-      }
-    }
-  }
 }
 void loop() {
   if (notifyStop == true) { //만약 스탑이 트루면
@@ -255,13 +242,20 @@ void loop() {
     notifyClients(Direction);//클라에 방향 전달
     notifyStop = false;//스탑 폴스로
   }
-  //ws.cleanupClients();//클린업!
+  yield();
+  Clocker();
+  ws.cleanupClients();//클린업!
   stepper.setMaxSpeed(i_speed);//속도 맥시멈 지정. 위에서 변경한대로.
-  stepper.run(); //굴릴려면 루프에서 불러야
-  UpdateCurrentHour();
-  UpdateCurrentMin();
+  stepper.run(); //굴릴려면 루프에서 불러야d
+  /*
+  Serial.print("Hour:");
   Serial.println(C_Hour);
+  Serial.print("Minute:");
   Serial.println(C_Min);
+  Serial.print("Second:");
+  Serial.println(C_Sec);
+  */
+  
   
   
   //Serial.println(SC_Min);
