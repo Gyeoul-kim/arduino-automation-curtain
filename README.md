@@ -1,16 +1,16 @@
 # arduino IoT curtain
 
-## KR
-배재대학교 2022학번 AI소프트웨어공학부 컴퓨터공학전공
-창의공학설계 08분반 팀 31 프로젝트
-2261030 김현우 2261031 신동원
+## KR   
+배재대학교 2022학번 AI소프트웨어공학부 컴퓨터공학전공   
+창의공학설계 08분반 팀 31 프로젝트   
+2261030 김현우 2261031 신동원   
    
-## EN
+## EN   
 Team Project of Pai Chai University, Major of Computer Engineering   
-Creative Engineering Design 08 Placement ,Team 31 project
+Creative Engineering Design 08 Placement ,Team 31 project   
 
 ## 프로잭트 소개
-Wi-Fi통신으로 커튼을 조작 할 수 있는 장치
+Wi-Fi통신으로 커튼을 조작 할 수 있는 장치   
   >조작 명령을 위한 앱 개발   
   >루틴 기능 아두이노 코드 개발   
   >Wi-Fi통신 코드 개발   
