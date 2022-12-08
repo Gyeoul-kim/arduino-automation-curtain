@@ -52,8 +52,16 @@ IoT기능을 지원할 수 있는 스위치 봇을 개발하고자 하였고 다
 - ULN2003모듈을 사용하여 동작 속도를 조절할 수 있는 코드 개발
 - 모터의 힘으로 커튼을 움직일 수 있는 하드웨어 개발
 - ~서버의 시간을 받아와~ 현재시간을 설정하고 특정시간에 기기가 동작하는 코드 개발(루틴기능)
-
-## 개발 과정
+   
+## 동작 예시 사진(우리가 만들고 싶은것) / working pictures(what we want to do)   
+![GIF](./Docs/curtains-opening.gif)   
+> 출처 image by Geniusness / https://github.com/Geniusness/Genius-AutoCurtains   
+   
+![image](./Docs/Genius-AutoCurtain-BeltandTensioner.jpg)   
+> 출처 image by Geniusness / https://github.com/Geniusness/Genius-AutoCurtains   
+   
+## 아두이노 코드 개발
+-
 -
 ### 앱 개발
 사진 순서는 앱 사용시 동작순서와 같도록 배치하였습니다.   
@@ -108,13 +116,15 @@ OPN,CLS,TIM값을 반환하며 앱은 받은 텍스트를 IF문으로 받아들�
 전역변수를 성공적으로 설정하면 서버는 텍스트 맨뒤의 1값으 먼저 읽고 앞에 TIM 텍스트와 뒤에 나머지 4개의 전역변수 값을 읽고 서버에 저장합니다.   
 이후 서버에 저장되어있는 현재시간 값과 루틴설정으로 만든 시간값이 일치하면 열기/닫기 동작을 수행합니다.   
    
-## 동작 예시 사진(우리가 만들고 싶은것) / working pictures(what we want to do)
-![GIF](./Docs/curtains-opening.gif)
-> 출처 image by Geniusness / https://github.com/Geniusness/Genius-AutoCurtains
-
-![image](./Docs/Genius-AutoCurtain-BeltandTensioner.jpg)
-> 출처 image by Geniusness / https://github.com/Geniusness/Genius-AutoCurtains
-
+## 어려웠던 부분 / 아쉬웠던 부분  
+ESP8266이 다루기 굉장히 까다로운 부품이어서 코드를 작성할 수록 오류가 늘어났습니다.    
+분명 논리적으로는 오류가 없는 코드이지만 ESP8266에서 지원하는 기능들이 많아 오히려 역으로 기능들이 서로 충돌하면서 코드를 짜는데 굉장히 어려움이 많았습니다.   
+특히 루틴기능을 만들때 시간을 굉장히 많이 빼앗기게 되었습니다.    
+루틴 기능 구현을 위해서 코드안에서 돌아갈 시간데이터가 있고 사용자가 원하는 시간에 기기를 동작하도록 개념설개를 하였었습니다.   
+이 시간을 서버에서 돌아가고 있는 시계를 NTP(Network Time Protocol)로 시간데이를 가져와서 코드에 활용하려 하였으나 NTP라이브러리가 기존코드와 계속 충돌하여 중간에 코드가 계속 뻣었고 이 때문에 2주 이상의 시간을 허비했습니다.   
+계속 서버에 시간을 가져오려고 노력하였으나 계속 코드가 터지는 바람에 결국 앱에서 사용자가 처음 사용할 때 현제시간을 입력하여 보내는 방식으로 해결하였습니다.   
+루틴 설계에서 많은 시간을 쓰다보니 속도조절 값과 진행상황을 보여주는 디스플레이를 만들고 싶었지만 시간이 부족하여 시도하지 못하여 아쉬움이 남습니다.   
+   
 ## references
 
 https://github.com/Geniusness/Genius-AutoCurtains //프로젝트 개념설계 참고자료
