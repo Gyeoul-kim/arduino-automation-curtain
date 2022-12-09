@@ -11,11 +11,11 @@ Creative Engineering Design 08 Placement ,Team 31 project
 
 ## 프로잭트 소개
 Wi-Fi통신으로 커튼을 조작 할 수 있는 장치   
-  >조작 명령을 위한 앱 개발   
-  >루틴 기능 아두이노 코드 개발   
+  >조작 명령을 위한 앱 개발     
   >Wi-Fi통신 코드 개발   
   >동작 속도 단계 조절 코드 개발   
   >동작 정지 기능 코드 개발
+  >루틴 기능 아두이노 코드 개발 
 
 ## Project Introduction
 A device that can manipulate curtains with Wi-Fi communication   
@@ -51,7 +51,7 @@ IoT기능을 지원할 수 있는 스위치 봇을 개발하고자 하였고 다
 - 명령을 받아 28BYJ-48모터를 작동시킬 수 있는 코드 개발
 - ULN2003모듈을 사용하여 동작 속도를 조절할 수 있는 코드 개발
 - 모터의 힘으로 커튼을 움직일 수 있는 하드웨어 개발
-- ~서버의 시간을 받아와~ 현재시간을 설정하고 특정시간에 기기가 동작하는 코드 개발(루틴기능)   
+- ~서버의 시간을 받아와~ 현재시간을 설정하고 특정시간에 기기가 동작하는 코드 개발(루틴기능) (개발성공)  
     
 ## 동작 예시 사진(우리가 만들고 싶은것) / working pictures(what we want to do)   
 ![GIF](./Docs/curtains-opening.gif)   
@@ -61,7 +61,7 @@ IoT기능을 지원할 수 있는 스위치 봇을 개발하고자 하였고 다
 -설명이 굉장히 많으니 기능 단위별로 끈어서 보시는게 편합니다.   
 -코드 바로 하단에 있는 글이 코드를 설명하는 글입니다.
 
--### 코드 설명   
+### 코드 설명   
 
     #include <ESPAsyncTCP.h>
     #include <Arduino.h>  //아두이노 명령셋
@@ -72,7 +72,7 @@ IoT기능을 지원할 수 있는 스위치 봇을 개발하고자 하였고 다
     #include <AccelStepper.h>  //스테퍼 라이브러리.
     #include <GDBStub.h>  //for Debug.
     
-코드를 위해 Library 파일들을 가져오게 됩니다.   
+아래 설명할 코드를 위해 필요한 Library 종류입니다.  
 
     //define Motor driver's pin
     #define IN1 5 
@@ -80,14 +80,14 @@ IoT기능을 지원할 수 있는 스위치 봇을 개발하고자 하였고 다
     #define IN3 14
     #define IN4 12
 
-모터 드라이버의 핀을 정의하여줍니다.   
+모터 드라이버의 핀을 정의하여줍니다.
 	
 
     char *substr(int s, int e, char *str);  //배열용 substring for c ref by codingdog.
     char *message = "";  //앱으로부터 받아오는 정보를 저장할 문자열입니다.
     const char* ssid = "각자_쓰는_와이파이_이름";  //상수로 SSID 지정.
     const char* password = "비밀번호";//상수로 PASSWORD 기록(보안에는 안좋음),공개형 와이파이인 경우 공란으로 둡니다.
-    AccelStepper stepper(AccelStepper::HALF4WIRE, IN1, IN3, IN2, IN4);  //스테퍼모터의 타입, 와이어를 지정합니다.
+    AccelStepper stepper(AccelStepper::HALF4WIRE, IN2, IN4, IN1, IN3);  //스테퍼모터의 타입, 와이어를 지정합니다.
     AsyncWebServer server(80);  //웹서버 오브젝트를 80 포트를 통해 받도록 지정합니다. 80포트는 http 프로토콜의 기본 포트입니다.
     AsyncWebSocket ws("/ws");  //웹소켓 오브젝트 생성하여 웹소켓 패킷은 해당 주소로만 받도록 지정합니다.
     char *Direction = "STP";  //기본 상태를 STP 즉, 정지 상태로 지정해둡니다.
@@ -435,12 +435,25 @@ OPN,CLS,TIM값을 반환하며 앱은 받은 텍스트를 IF문으로 받아들�
 ![CLOSE루틴설정](https://user-images.githubusercontent.com/117341089/206373184-bc539a43-e599-4fcf-8679-0e91682a4eb1.PNG)   
 루틴 설정을 위해 버튼을 클릭하면 시간 설정 화면이 나옵니다.   
 시간 설정이후 사용자가 설정한 시간값을 화면에 표기합니다.  
+이후 전역변수에 설정한 시간값을 저장합니다. IF문을 통해 시간은 5분 단위로만 설정할 수 있도록 재한하였습니다.   
 ![루틴설정화면](https://user-images.githubusercontent.com/117341089/206374695-e0f10afa-f693-4a4d-996d-41b90f0c5832.PNG)
 ![루틴시간설정툴팁](https://user-images.githubusercontent.com/117341089/206374700-0ed06940-43e1-4aff-9c66-bfdcff3d617d.PNG)   
-이후 전역변수에 설정한 시간값을 저장합니다. IF문을 통해 시간은 5분 단위로만 설정할 수 있도록 재한하였습니다.   
 5분 단위가 아닐경우 5분으로 설정하도록 툴팁을 만들었습니다.   
 전역변수를 성공적으로 설정하면 서버는 텍스트 맨뒤의 1값으 먼저 읽고 앞에 TIM 텍스트와 뒤에 나머지 4개의 전역변수 값을 읽고 서버에 저장합니다.   
 이후 서버에 저장되어있는 현재시간 값과 루틴설정으로 만든 시간값이 일치하면 열기/닫기 동작을 수행합니다.   
+   
+## 하드웨어 제작 / 시제품 제작
+   
+![시선대각 모형 닫음](https://user-images.githubusercontent.com/117341089/206663714-3548313e-f805-4017-a40f-81b0fd8e3377.PNG)
+![시선대각 모형](https://user-images.githubusercontent.com/117341089/206663724-0be49529-087c-4bfe-b700-74d41aee22b4.PNG)   
+SketchUp 무료툴을 사용해 제작한 초기형 모델입니다.   
+   
+![image](./Docs/Genius-AutoCurtain-BeltandTensioner.jpg)    
+> 출처 image by Geniusness / https://github.com/Geniusness/Genius-AutoCurtains      
+처음에는 사진처럼 옆으로 슬라이딩하는 방식으로 제작하려 했지만 하드웨어 구조가 너무 복잡해진다고 판단되어서 위아래로 롤링하는 방식으로 변경하였습니다.   
+
+![시제품 완성](https://user-images.githubusercontent.com/117341089/206667713-ef3639a9-a3af-4ed4-b57a-be0ea232816a.PNG)   
+초기형 3D 모델을 토대로 만든 시제품입니다.   
    
 ## 어려웠던 부분 / 아쉬웠던 부분  
 ESP8266이 다루기 굉장히 까다로운 부품이어서 코드를 작성할 수록 오류가 늘어났습니다.    
