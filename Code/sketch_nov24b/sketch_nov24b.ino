@@ -78,18 +78,22 @@ void Clocker() {  //시간 측정.
       C_Hour = 0;
     }
     TimeRoutine();
-    Serial.println(C_Sec);
-    Serial.println(C_Min);
+    
+    Serial.print("T:");
     Serial.println(C_Hour);
+    Serial.print("M:");
+    Serial.println(C_Min);
+    Serial.print("S:");
+    Serial.println(C_Sec);
   }
 }
 
 void TimeRoutine() {                                               //루틴 함수.
-  if ((RO_Hour == C_Hour) && (RO_Min == C_Min) && (C_Sec <= 1)) {  //만약 여는시간과 시스템 시간이 일치한다면
+  if ((RO_Hour == C_Hour) && (RO_Min == C_Min) && (C_Sec <= 1) && !(C_Sec==0||C_Min==0)) {  //만약 여는시간과 시스템 시간이 일치한다면
     Direction = "OPN";
     R_speed = 1000;
     OpenCurtain();                                                        //열기
-  } else if ((RC_Hour == C_Hour) && (RC_min == C_Min) && (C_Sec <= 1)) {  //아니라면 닫는 시간과 시스템 시간이 일치한다면
+  } else if ((RC_Hour == C_Hour) && (RC_min == C_Min) && (C_Sec <= 1)&& !(C_Sec==0||C_Min==0)) {  //아니라면 닫는 시간과 시스템 시간이 일치한다면
     Direction = "CLS";
     R_speed = 1000;
     CloseCurtain();  //닫기
@@ -199,7 +203,7 @@ void handleWebSocketMessage(void *arg, uint8_t *data, size_t len) {  //웹소켓
         StopCurtain();
       }
 
-    } else if (isTriggerI == 1) {
+    } else if (isTriggerI == 2) {
       SC_Hour = substr(6, 7, message);
       SC_Min = substr(9, 10, message);
       SC_Sec = "0";
@@ -210,7 +214,7 @@ void handleWebSocketMessage(void *arg, uint8_t *data, size_t len) {  //웹소켓
       Serial.print(SC_Min);
       Serial.print(C_Sec);
     }
-    if (isTriggerI == 2) {                 //루틴 돌리는 코드.
+    if (isTriggerI == 1) {                 //루틴 돌리는 코드.
       SRO_Hour = substr(6, 7, message);    //여는시각의 시를 추출함.
       SRO_Min = substr(9, 10, message);    //여는시각의 분을 추출함.
       SRC_Hour = substr(12, 13, message);  //닫는시간의 시를 추출함.
@@ -231,12 +235,13 @@ void handleWebSocketMessage(void *arg, uint8_t *data, size_t len) {  //웹소켓
 
 void OpenCurtain() {
   notifyClients(Direction);
-  ESP.wdtDisable();           //딜레이 사용시 와치독 켜져 뻗어버리는 문제 발생.
-  stepper.move(steps * 2.8);  //스텝수만큼 회전.
-  Serial.print("Opened");     //열었다고 시리얼에 표시
+  ESP.wdtDisable();         //딜레이 사용시 와치독 켜져 뻗어버리는 문제 발생.
+  stepper.move(steps * 3);  //스텝수만큼 회전.
+  Serial.print("Opened");   //열었다고 시리얼에 표시
   //delay(5000);//5초 대기
   ESP.wdtEnable(5600);  //작동 후 다시 켜줌.
   //Direction="STP";
+  notifyStop = true;  //스탑 폴스로
   notifyClients(Direction);
 }
 
@@ -248,6 +253,7 @@ void CloseCurtain() {
   //delay(5000);//5초 대기.
   ESP.wdtEnable(5600);  //다시 와치독 활성화.
   //Direction="STP";
+  notifyStop = true;  //스탑 폴스로
   notifyClients(Direction);
 }
 
