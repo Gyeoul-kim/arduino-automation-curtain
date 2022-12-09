@@ -72,7 +72,7 @@ IoT기능을 지원할 수 있는 스위치 봇을 개발하고자 하였고 다
     #include <AccelStepper.h>  //스테퍼 라이브러리.
     #include <GDBStub.h>  //for Debug.
     
-코드를 위해 Library 파일들을 가져오게 됩니다.   
+아래 설명할 코드를 위해 필요한 Library 종류입니다.  
 
     //define Motor driver's pin
     #define IN1 5 
@@ -80,14 +80,14 @@ IoT기능을 지원할 수 있는 스위치 봇을 개발하고자 하였고 다
     #define IN3 14
     #define IN4 12
 
-모터 드라이버의 핀을 정의하여줍니다.   
+모터 드라이버의 핀을 정의하여줍니다.
 	
 
     char *substr(int s, int e, char *str);  //배열용 substring for c ref by codingdog.
     char *message = "";  //앱으로부터 받아오는 정보를 저장할 문자열입니다.
     const char* ssid = "각자_쓰는_와이파이_이름";  //상수로 SSID 지정.
     const char* password = "비밀번호";//상수로 PASSWORD 기록(보안에는 안좋음),공개형 와이파이인 경우 공란으로 둡니다.
-    AccelStepper stepper(AccelStepper::HALF4WIRE, IN1, IN3, IN2, IN4);  //스테퍼모터의 타입, 와이어를 지정합니다.
+    AccelStepper stepper(AccelStepper::HALF4WIRE, IN2, IN4, IN1, IN3);  //스테퍼모터의 타입, 와이어를 지정합니다.
     AsyncWebServer server(80);  //웹서버 오브젝트를 80 포트를 통해 받도록 지정합니다. 80포트는 http 프로토콜의 기본 포트입니다.
     AsyncWebSocket ws("/ws");  //웹소켓 오브젝트 생성하여 웹소켓 패킷은 해당 주소로만 받도록 지정합니다.
     char *Direction = "STP";  //기본 상태를 STP 즉, 정지 상태로 지정해둡니다.
