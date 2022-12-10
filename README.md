@@ -441,8 +441,13 @@ OPN,CLS,TIM값을 반환하며 앱은 받은 텍스트를 IF문으로 받아들�
 전역변수를 성공적으로 설정하면 서버는 텍스트 맨뒤의 1값으 먼저 읽고 앞에 TIM 텍스트와 뒤에 나머지 4개의 전역변수 값을 읽고 서버에 저장합니다.   
 이후 서버에 저장되어있는 현재시간 값과 루틴설정으로 만든 시간값이 일치하면 열기/닫기 동작을 수행합니다.   
    
-## 하드웨어 제작 / 시제품 제작
+## 하드웨어 제작 / 시제품 제작   
    
+![ESP8266,UNL2003,28BYJ-48 연결 회로도](https://user-images.githubusercontent.com/117341089/206840924-6608406a-98e7-4637-b2c3-4476c347e80b.png)
+![ESP8266,UNL2003 연결포트](https://user-images.githubusercontent.com/117341089/206840926-dbd8604d-7b09-4cca-93a6-43b8a3863e39.png)   
+ESP8266 과 ULN2003, 28BYJ-48 연결 회로도
+출처: https://randomnerdtutorials.com/esp8266-nodemcu-stepper-motor-28byj-48-uln2003/    
+    
 ![시선대각 모형 닫음](https://user-images.githubusercontent.com/117341089/206663714-3548313e-f805-4017-a40f-81b0fd8e3377.PNG)
 ![시선대각 모형](https://user-images.githubusercontent.com/117341089/206663724-0be49529-087c-4bfe-b700-74d41aee22b4.PNG)   
 SketchUp 무료툴을 사용해 제작한 초기형 모델입니다.   
@@ -507,6 +512,8 @@ https://rasino.tistory.com/300 //앱인벤터를 이용한 ESP8266연결 개념�
 https://www.youtube.com/watch?v=_Ugw-8EPOa8 //앱인벤터를 이용한 ESP8266연결 개념설계 참고자료4
 
 https://devicemart.blogspot.com/2019/05/4-iot-wifi-app-inventor-3.html //앱인벤터를 이용한 ESP8266연결 개념설계 참고자료5
+
+https://randomnerdtutorials.com/esp8266-nodemcu-stepper-motor-28byj-48-uln2003/ //ESP8266 스테퍼 모터연결/조작 참고자료
 
 https://kusson.tistory.com/400 //웹 인벤터 루틴기능 시간선택버튼 개념설계 참고자료
  
