@@ -248,7 +248,7 @@ void OpenCurtain() {
 void CloseCurtain() {
   notifyClients(Direction);
   ESP.wdtDisable();          //와치독 임시 비활성화.
-  stepper.move(-steps * 2);  //역방향으로 한바퀴 회전.
+  stepper.move(-steps * 3);  //역방향으로 한바퀴 회전.
   Serial.print("CLOSE");     //닫았다고 표시.
   //delay(5000);//5초 대기.
   ESP.wdtEnable(5600);  //다시 와치독 활성화.
