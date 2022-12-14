@@ -56,12 +56,31 @@ IoT기능을 지원할 수 있는 스위치 봇을 개발하고자 하였고 다
 ## 동작 예시 사진(우리가 만들고 싶은것) / working pictures(what we want to do)   
 ![GIF](./Docs/curtains-opening.gif)   
 > 출처 image by Geniusness / https://github.com/Geniusness/Genius-AutoCurtains    
+## 프로젝트 완성품
+### 커튼 닫기
+![커튼 닫기 GIF](https://user-images.githubusercontent.com/117341089/207587350-a8c36a9c-8e93-47c9-a269-745ed1294685.gif)
+### 커튼 열기
+![커튼 열기 GIF](https://user-images.githubusercontent.com/117341089/207587381-f3255c4b-0d2c-411d-9657-ebc517fcc8ca.gif)
+### 커튼 정지
+![커튼 정지 GIF](https://user-images.githubusercontent.com/117341089/207587389-d50e9247-46b4-42f9-aded-4808dabc6789.gif)
+### 루틴 기능
+![루틴 닫기 GIF](https://user-images.githubusercontent.com/117341089/207589651-d1a81688-de90-42e7-b66a-7b2c0a834ccc.gif)
+
    
+## 순서도
+### 서버 대기 상태
+![Before IF](https://user-images.githubusercontent.com/117341089/207583608-c7a1e742-bbf8-4f6c-b957-6c9cdff81e36.png)
+### 커튼 열기/닫기/정지   
+![1](https://user-images.githubusercontent.com/117341089/207583576-1796add8-1168-4729-b446-89fc1aaba518.png)
+### 루틴기능 설정
+![3](https://user-images.githubusercontent.com/117341089/207583570-fb018d22-6bb5-4b6d-b096-5c309ed35aa4.png)
+### 현제시간 설정
+![2](https://user-images.githubusercontent.com/117341089/207583558-3cca3009-bce6-42a4-8d56-e2595ca9e39a.png)
+
+
+
 ## 아두이노 코드 개발
--설명이 굉장히 많으니 기능 단위별로 끈어서 보시는게 편합니다.   
-
-
-### 코드 설명   
+설명이 굉장히 많으니 기능 단위별로 끈어서 보시는게 편합니다.     
    
 ### 라이브러리
 기능 사용을 위해 라이브러리를 포함시킵니다.
