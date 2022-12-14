@@ -259,7 +259,7 @@ ESP8266에 남는 메모리 공간을 활용하기 위해 사용하는 코드입
     void notifyClients(char *state) {  //클라이언트에 신호 전송
       ws.textAll(state);               //받은거 그대로 웹소켓 통해 클라이언트로 전송.
     }
-### 소통 큐격 인식 코드 
+### 소통 격 인식 코드 
 웹소켓 메시지를 받아 어떻게 처리하는지를 결정하는 함수입니다.
 
     void onEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType type, void *arg, uint8_t *data, size_t len) {  
