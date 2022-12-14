@@ -84,7 +84,7 @@ IoT기능을 지원할 수 있는 스위치 봇을 개발하고자 하였고 다
 배열에 쓸 Substring 기능을 구현하였습니다.
 
     char *message = "";                           //스트링 초기화.
-    const char *ssid = "AI_SW_2.4G";              //상수로 SSID 지정.
+    const char *ssid = "";                        //상수로 SSID 지정.
     const char *password = "";                    //상수로 PASSWORD 기록(보안에는 안좋음)
     AccelStepper stepper(8, IN2, IN4, IN1, IN3);  //스테퍼모터 지정.
     AsyncWebServer server(80);                    //웹서버 오브젝트 생성.
@@ -231,7 +231,7 @@ FS 시스템을 설정하는 함수입니다.
           notifyClients(Direction);                                                                    //방향 클라이언트에 전송
           break;                                                                                       //탈출
         case WS_EVT_DISCONNECT:                                                                        //연결 끊기면
-          Serial.printf("WebSocket client #%u disconnected\n", client->id());                          //끊겼다고 시리얼ㅊ에 출력
+          Serial.printf("WebSocket client #%u disconnected\n", client->id());                          //끊겼다고 시리얼에 출력
           break;
         case WS_EVT_DATA:                          //데이터 들어오면
           handleWebSocketMessage(arg, data, len);  //함수에 던지기
@@ -253,7 +253,7 @@ FS 시스템을 설정하는 함수입니다.
         Serial.print("value :");
         Serial.println(isTriggerI);
         if (isTriggerI == 0) {
-          Speed = substr(0, 0, message);  //message에서 & 앞의 문자 추출
+          Speed = substr(0, 0, message);      //message에서 & 앞의 문자 추출
           int Speed_i = atoi(Speed);
           Direction = substr(2, 4, message);  //& 뒤의 문자를 추출.
           Serial.println(message);            //표시
@@ -327,7 +327,7 @@ FS 시스템을 설정하는 함수입니다.
       stepper.move(-steps * 2);  //역방향으로 한바퀴 회전.
       Serial.print("CLOSE");     //닫았다고 표시.
       //delay(5000);//5초 대기.
-      ESP.wdtEnable(5600);  //다시 와치독 활성화.
+      ESP.wdtEnable(5600);       //다시 와치독 활성화.
       //Direction="STP";
       notifyClients(Direction);
     }
