@@ -12,7 +12,7 @@
 #define IN3 14
 #define IN4 12
 
-char *substr(int s, int e, char *str);        //배열용 substring for c ref by codingdog.
+char *substr(int s, int e, char *str);        //배열용 substring for c 
 char *message = "";                           //스트링 초기화.
 const char *ssid = "2261030";              //상수로 SSID 지정.
 const char *password = "team3131";                    //상수로 PASSWORD 기록(보안에는 안좋음)
@@ -149,10 +149,10 @@ void notifyClients(char *state) {  //클라이언트에 신호 전송
   ws.textAll(state);               //받은거 그대로 웹소켓 통해 클라이언트로 전송.
 }
 
-void onEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType type, void *arg, uint8_t *data, size_t len) {  //여기는 진짜 모르겠다 ㅎㅎㅎ
+void onEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType type, void *arg, uint8_t *data, size_t len) {  //웹소켓 패킷 받아오면 호출되는
   switch (type) {                                                                                                              //웹소켓 이벤트 타입에 따라 스위치 돌리기.
     case WS_EVT_CONNECT:                                                                                                       //웹소켓 연결되면
-      Serial.printf("WebSocket client #%u connected from %s\n", client->id(), client->remoteIP().toString().c_str());          //어..시리얼에 출력(id,아이피,원격 아이피)
+      Serial.printf("WebSocket client #%u connected from %s\n", client->id(), client->remoteIP().toString().c_str());          //시리얼에 출력(id,아이피,원격 아이피)
       notifyClients(Direction);                                                                                                //방향 클라이언트에 전송
       break;                                                                                                                   //탈출
     case WS_EVT_DISCONNECT:                                                                                                    //연결 끊기면
