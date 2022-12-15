@@ -14,8 +14,8 @@
 
 char *substr(int s, int e, char *str);        //배열용 substring for c ref by codingdog.
 char *message = "";                           //스트링 초기화.
-const char *ssid = "AI_SW_2.4G";              //상수로 SSID 지정.
-const char *password = "";                    //상수로 PASSWORD 기록(보안에는 안좋음)
+const char *ssid = "2261030";              //상수로 SSID 지정.
+const char *password = "team3131";                    //상수로 PASSWORD 기록(보안에는 안좋음)
 AccelStepper stepper(8, IN2, IN4, IN1, IN3);  //스테퍼모터 지정.
 AsyncWebServer server(80);                    //웹서버 오브젝트 생성.
 AsyncWebSocket ws("/ws");                     //웹소켓 오브젝트 생성.
@@ -271,7 +271,7 @@ void StopCurtain() {
 void setup() {
   // Serial port for debugging purposes
 
-  Serial.begin(115200);                                          //시리얼 활성화
+  Serial.begin(9600);                                          //시리얼 활성화
   initWiFi();                                                    //와이파이온
   initWebSocket();                                               //웹소켓 온
   initFS();                                                      //FS 온
