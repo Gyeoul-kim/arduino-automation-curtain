@@ -56,12 +56,34 @@ IoT기능을 지원할 수 있는 스위치 봇을 개발하고자 하였고 다
 ## 동작 예시 사진(우리가 만들고 싶은것) / working pictures(what we want to do)   
 ![GIF](./Docs/curtains-opening.gif)   
 > 출처 image by Geniusness / https://github.com/Geniusness/Genius-AutoCurtains    
-   
-## 아두이노 코드 개발
--설명이 굉장히 많으니 기능 단위별로 끈어서 보시는게 편합니다.   
--코드 바로 하단에 있는 글이 코드를 설명하는 글입니다.
+## 프로젝트 완성품
+### 커튼 닫기
+![커튼 닫기 GIF](https://user-images.githubusercontent.com/117341089/207587350-a8c36a9c-8e93-47c9-a269-745ed1294685.gif)
+### 커튼 열기
+![커튼 열기 GIF](https://user-images.githubusercontent.com/117341089/207587381-f3255c4b-0d2c-411d-9657-ebc517fcc8ca.gif)
+### 커튼 정지
+![커튼 정지 GIF](https://user-images.githubusercontent.com/117341089/207587389-d50e9247-46b4-42f9-aded-4808dabc6789.gif)
+### 루틴 기능
+![루틴 닫기 GIF](https://user-images.githubusercontent.com/117341089/207589651-d1a81688-de90-42e7-b66a-7b2c0a834ccc.gif)
 
-### 코드 설명   
+   
+## 순서도
+### 서버 대기 상태
+![Before IF](https://user-images.githubusercontent.com/117341089/207583608-c7a1e742-bbf8-4f6c-b957-6c9cdff81e36.png)
+### 커튼 열기/닫기/정지   
+![1](https://user-images.githubusercontent.com/117341089/207583576-1796add8-1168-4729-b446-89fc1aaba518.png)
+### 루틴기능 설정
+![3](https://user-images.githubusercontent.com/117341089/207583570-fb018d22-6bb5-4b6d-b096-5c309ed35aa4.png)
+### 현제시간 설정
+![2](https://user-images.githubusercontent.com/117341089/207583558-3cca3009-bce6-42a4-8d56-e2595ca9e39a.png)
+
+
+
+## 아두이노 코드 개발
+설명이 굉장히 많으니 기능별로 끈어서 보시는게 편합니다.     
+   
+### 라이브러리
+기능 사용을 위해 라이브러리를 포함시킵니다.
 
     #include <ESPAsyncTCP.h>
     #include <Arduino.h>            //아두이노 명령셋
@@ -71,17 +93,23 @@ IoT기능을 지원할 수 있는 스위치 봇을 개발하고자 하였고 다
     #include "LittleFS.h"           //파일시스템 사용 위해
     #include <AccelStepper.h>       //스테퍼 라이브러리.
     #include <GDBStub.h>            //for Debug.
-기능 사용을 위해 라이브러리를 포함시킵니다.
+
+### 스테퍼 모터 핀 지정
+모터 드라이버의 핀을 지정합니다. 숫자는 NodeMCU(ESP8266)모듈의 GPIO 핀 번호입니다.
 
     //define Motor driver's pin
     #define IN1 5
     #define IN2 4
     #define IN3 14
     #define IN4 12
-모터 드라이버의 핀을 지정합니다. 숫자는 NodeMCU(ESP8266)모듈의 GPIO 핀 번호입니다.
+
+### 배열 선언
+배열에 쓸 Substring 기능을 구현하였습니다.    
 
     char *substr(int s, int e, char *str);        //배열용 substring
-배열에 쓸 Substring 기능을 구현하였습니다.
+
+### 필요 변수 선언
+프로그램 가동에 필요한 변수들을 선언합니다.   
 
     char *message = "";                           //스트링 초기화.
     const char *ssid = "";                        //상수로 SSID 지정.
@@ -119,7 +147,9 @@ IoT기능을 지원할 수 있는 스위치 봇을 개발하고자 하였고 다
     unsigned long currentMillis;
     unsigned long previousMillis;
     const long interval = 1000;
-프로그램 가동에 필요한 변수들을 선언합니다.
+  
+### 배열 읽기 범위 지정
+텍스트 규정 배열에서 읽기 범위를 구분하는 기능을 담당합니다. 
 
     char *substr(int star, int en, char *str) {  //Substring 기능 구현
 
@@ -128,7 +158,9 @@ IoT기능을 지원할 수 있는 스위치 봇을 개발하고자 하였고 다
       niew[en - star + 1] = 0;                                      //niew 마지막에 널문자 추가.
       return niew;                                                  //niew 값 돌려보내기.
     }
-서브스트링 기능을 구현한 것입니다.
+
+### 서버 시계 구현
+인터럽트 기능 및 내부적 시간 계산 기능을 구현하였습니다. 
 
     void Clocker() {  //인터럽트
 
@@ -155,7 +187,8 @@ IoT기능을 지원할 수 있는 스위치 봇을 개발하고자 하였고 다
         Serial.println(C_Hour);
       }
     }
-인터럽트 기능 및 내부적 시간 계산 기능을 구현하였습니다.
+### 루틴 기능
+루틴 기능을 작성하였습니다.   
 
     void TimeRoutine() {                                               //루틴 함수.
       if ((RO_Hour == C_Hour) && (RO_Min == C_Min) && (C_Sec <= 1)) {  //만약 여는시간과 시스템 시간이 일치한다면
@@ -185,7 +218,8 @@ IoT기능을 지원할 수 있는 스위치 봇을 개발하고자 하였고 다
     Serial.println("");
       }
     }
-루틴 기능을 작성하였습니다.
+### FS기능 (mDNS기능)
+ESP8266에 남는 메모리 공간을 활용하기 위해 사용하는 코드입니다.
 
     void initFS() {                                                       //LittleFS 파일 시스템 사용(ESP만의 기능. 내부 저장 공간 일부를 파일 저장하는데 사용 가능.)
       if (!LittleFS.begin()) {                                            //LittleFS가 시작되지 않는다면
@@ -194,7 +228,8 @@ IoT기능을 지원할 수 있는 스위치 봇을 개발하고자 하였고 다
         Serial.println("LittleFS mounted successfully");  //메시지 출력
       }
     }
-FS 시스템을 설정하는 함수입니다. 
+### ESP8266 제어
+서버를 만들 와이파이(공유기)를 설정하는 함수입니다.  
 
     void initWiFi() {                          // Initialize WiFi
       WiFi.mode(WIFI_STA);                     //와이파이 클라이언트로의 설정.
@@ -211,18 +246,21 @@ FS 시스템을 설정하는 함수입니다.
       Serial.println("mDNS Is Started.");  //메세지 출력
       Serial.println("Server is on!");     //모든 과정이 끝났다면 출력.
     }
-와이파이를 설정하는 함수입니다.
+### 웹 소켓 통신
+웹소켓을 받기 위한 준비를 하는 함수입니다.  
 
     void initWebSocket() {     //웹소켓 세팅
       ws.onEvent(onEvent);     //온이벤트 호출~
       server.addHandler(&ws);  //헨들러 추가~
     }
-웹소켓을 받기 위한 준비를 하는 함수입니다.
+### 연결상태 클라이언트 데이터 전송 
+현제 연결상태를 앱으로 전달하는 기능을 가진 함수입니다.
 
     void notifyClients(char *state) {  //클라이언트에 신호 전송
       ws.textAll(state);               //받은거 그대로 웹소켓 통해 클라이언트로 전송.
     }
-내용을 앱으로 전달하는 기능을 가진 함수입니다.
+### 소통 규격 인식 코드 
+웹소켓 메시지를 받아 어떻게 처리하는지를 결정하는 함수입니다.
 
     void onEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType type, void *arg, uint8_t *data, size_t len) {  
       switch (type) {                                                                                  //웹소켓 이벤트 타입에 따라 스위치 돌리기.
@@ -241,7 +279,8 @@ FS 시스템을 설정하는 함수입니다.
           break;
       }
     }
-웹소켓 메시지를 받아 어떻게 처리하는지를 결정하는 함수입니다.
+### 소통 규격 텍스트 저장 방식 
+앱으로 부터 메세지를 받아 필요한 값을 추출하고 추출한 값에 맞는 명령을 내리는 코드입니다.    
 
     void handleWebSocketMessage(void *arg, uint8_t *data, size_t len) {  //웹소켓 메시지 해독
       AwsFrameInfo *info = (AwsFrameInfo *)arg;
@@ -307,7 +346,8 @@ FS 시스템을 설정하는 함수입니다.
     }
       }
     }
-메세지를 받아 필요한대로 추출하고 그에 맞게 작동하는 코드입니다.   
+### 커튼 열기
+커튼을 여는 함수입니다.
 
     void OpenCurtain() {
       notifyClients(Direction);
@@ -319,7 +359,8 @@ FS 시스템을 설정하는 함수입니다.
       //Direction="STP";
       notifyClients(Direction);
     }
-커튼을 여는 함수입니다.   
+### 커튼 닫기
+커튼을 닫는 함수입니다.    
 
     void CloseCurtain() {
       notifyClients(Direction);
@@ -331,7 +372,8 @@ FS 시스템을 설정하는 함수입니다.
       //Direction="STP";
       notifyClients(Direction);
     }
-커튼을 닫는 함수입니다.   
+### 커튼 정지
+커튼을 멈추는 함수입니다.  
 
     void StopCurtain() {
       notifyClients(Direction);
@@ -343,7 +385,8 @@ FS 시스템을 설정하는 함수입니다.
       Direction = "STP";
       notifyClients(Direction);
     }
-커튼을 멈추는 함수입니다.   
+### ESP8266 연결
+ESP8266 서버 구동에 필요한 코드입니다. 
 
     void setup() {
       // Serial port for debugging purposes
@@ -360,7 +403,8 @@ FS 시스템을 설정하는 함수입니다.
       stepper.setAcceleration(1000);           //가감속력 설정, 1000이면 거~의 즉각적 정지.
       //gdbstub_init();for debug purpose.
     }
-ESP8266 전원 인가시 실행되는 함수입니다.   
+### 대기상태
+ESP8266 작동중일때 돌고있는 함수입니다.   
 
     void loop() {
       if (stepper.distanceToGo() == 0 && notifyStop == true) {  //만약 스탑이 트루면
@@ -373,10 +417,9 @@ ESP8266 전원 인가시 실행되는 함수입니다.
       //ws.cleanupClients();//클린업!
       stepper.setMaxSpeed(R_speed);  //속도 맥시멈 지정. 위에서 변경한대로.
       stepper.run();                 //굴릴려면 루프에서 불러야
-    }
-ESP8266 작동중일때 돌고있는 함수입니다.   
-
-
+    } 
+   
+   
 ## 서버와 앱 소통 방식 / 텍스트 규격
 ![WebSocket Packet](https://user-images.githubusercontent.com/117341089/206406701-058912a0-887f-4dbd-bd59-982a8c334e98.png)    
 저희 팀이 만든 앱에서 서버로 메시지를 전송할 때 사용하는 메시지 규격입니다.   
@@ -386,36 +429,42 @@ ESP8266 작동중일때 돌고있는 함수입니다.
    
 ## 앱 개발
 -설명 순서는 앱 사용시 사용순서와 일치하도록 배치하였습니다.   
--사진의 바로 밑에있는 글이 코드를 설명하는 글입니다.   
-   
+
+
+### 전역변수 초기값   
 ![전역번수](https://user-images.githubusercontent.com/117341089/206365355-f7b39e60-556f-4e3b-bf84-d80a402e4c0f.PNG)   
-전역변수 초기값   
-    
+
+### 앱 메인 화면   
 ![메인화면](https://user-images.githubusercontent.com/117341089/206363257-6f0aabe3-1efc-4b48-8e74-2c02c139a65b.PNG)   
-앱 메인 화면  
-   
+
+### 서버 연결 함수   
 ![연결버튼](https://user-images.githubusercontent.com/117341089/206363602-5c3c2375-76f7-437b-80c0-e82fe0c3738b.PNG)   
 주소창에 주소 입력이후 연결 버튼을 누르면 전역변수에 IP주소값이 URL형식으로 값이 들어가게 되고 앱소켓 방식으로 서버와 연결을 시도합니다.   
 이떄 전역변수 PORT값은 아두이노 코드에서 주소에 접근하려는 시도가 있을때 접근의도를 파악하기위해 포트값으로 80(=PORT값)이 있는지 확인합니다.    
 단순하게 PORT값은 웹소켓 방식으로 연결하는데 필요한 값입니다.   
 
+### 연결 상태 표기
 ![웹 소켓 연결 상태 표기](https://user-images.githubusercontent.com/117341089/206368728-54a1ab19-2b9f-4bf1-b720-ba5d971b9cf2.PNG)   
 연결 버튼을 누른이후 연결 상태를 메인화면 상태창에 연결 상태를 표기합니다.   
    
+### 현재시간 설정
 ![현재시간 설정](https://user-images.githubusercontent.com/117341089/206715276-31e1f4bf-95cc-4a60-8bf2-fcdd44490430.PNG)      
 연결 성공이후 현재시간을 설정해줘야 합니다.   
 웹소켓 방식으로 텍스트를 보내며 서버에서는 택스트 끝에 2값을 먼져 받아들여 CTI와 전역변수 CURtimeH(현재:시), CURtimeM(현재:분) 값만 읽고 저장합니다.    
 IF문으로 시간값과 분값이 한자리수로 입력받으면 값 앞에 0을 넣어 통신 규격을 맞췄습니다. ex) 1시 5분 설정 >> 01시 05분 형태로 전송   
      
+### 동작 상태 표기
 ![반환 데이터 진행 표기](https://user-images.githubusercontent.com/117341089/206371215-4ea7866d-eafa-4905-ba25-92b7092c14fa.PNG)     
 서버는 동작 명령을 받고 텍스트를 읽어 해당동작에 해당하는 텍스트를 앱으로 반환합니다.    
 OPN,CLS,TIM값을 반환하며 앱은 받은 텍스트를 IF문으로 받아들여 현제 동작상태를 상태표기창에 표기합니다.   
    
+### 속도 설정
 ![속도설정](https://user-images.githubusercontent.com/117341089/206715037-c4b46995-c60b-42ed-8dd3-aee79f87b68a.PNG)    
 속도설정 버튼을 클릭하면 1단계 = 값1, 2단계 = 값2, 3단계 = 값3 방식으로 값을 SPEED에 저장합니다.    
 ![속도설정 피드백](https://user-images.githubusercontent.com/117341089/206369974-f2f6be9f-b39f-423f-ac92-84064370ef7a.PNG)    
 속도가 변경되었음을 보여주기 위해서 버튼 클릭이후 사용자에서 피드백을 바로 보여주는 화면을 만들어 속도변경을 인지하도록 만들었습니다.   
    
+### 커튼 열기/닫기
 ![BtnON](https://user-images.githubusercontent.com/117341089/206371777-4009a2e7-594c-4e60-b78b-447f9f6aaf55.PNG)
 ![BtnOFF](https://user-images.githubusercontent.com/117341089/206371784-1b5d8494-5584-4407-a151-588b69e11d8f.PNG)   
 열기/닫기 버튼을 누를경우 동작하는 함수입니다.   
@@ -423,11 +472,13 @@ OPN,CLS,TIM값을 반환하며 앱은 받은 텍스트를 IF문으로 받아들�
 뒤에있는 전역변수값은 서버에서 무시하기에 어떠한 값이 들어가도 상관없습니다.   
 열기/닫기 버튼을 클릭했음을 사용자에게 알리기 위해 소리 피드백을 추가하였습니다. BBI-TONG 이라는 소리가 납니다.   
    
+### 커든 동작 정지
 ![BtnSTOP](https://user-images.githubusercontent.com/117341089/206372448-16fbe6f0-3e57-4f7c-a12d-e9c4f1f40e2e.PNG)   
 정지버튼을 누를경우 동작하는 함수입니다.
 모든 동작을 정지하도록 명령을 보내기에 서버에서는 0값을 먼저 읽고 앞에 SPEED값과 STP 텍스트만 읽고 기기에 동작을 정지합니다.   
 정지 버튼을 클릭했음을 사용자에게 알리기 위해 소리 피드백을 추가하였으며 열기/닫기와는 다른 BBI-BBI 소리가 나도록 설정하여 열기/닫기와 다른 정지 기능을 사용했음을 사용자에게 분간할 수 있도록 하였습니다.   
     
+### 루틴 설정
 ![OPEN루틴설정](https://user-images.githubusercontent.com/117341089/206715569-fb0db0a8-cae5-4d60-b164-56b804ad6087.PNG)
 ![CLOSE루틴설정](https://user-images.githubusercontent.com/117341089/206715573-0610f949-0bee-4ae8-b957-446eb594f538.PNG)    
 루틴 설정을 위해 버튼을 클릭하면 시간 설정 화면이 나옵니다.   
@@ -492,6 +543,11 @@ ESP8266이 다루기 굉장히 까다로운 부품이어서 코드를 작성할 
 여전히 시도해볼 방법으로 ESP8266보드만 쓰는것이 아닌 MEGA보드를 추가로 사용하여 각각 보드에 다른 코드를 사용하여 명령처리를 나누는 것을 시도해보고 싶었지만 시간적으로 개발이 불가능 할것 같아 결국 루틴기능 구현을 포기하게 되었습니다.   
 (+ 교수님께서 MS인터럽트 방식에 대해서 말씀해주셨고 코드내부에 가상 시계코드에 MS인터럽트 방식을 적용하여 루틴기능 개발에 성공했습니다!!)
 루틴기능 이외에도 기기의 동작상태와 속도를 알려주는 디스플레이를 추가한다거나 조도센서를 사용하여 빛의 세기로 기기를 자동으로 동작하게 만드는 기능을 구현하고 싶었으나 시간의 벽에 막혀 시도해보지 못해 프로젝트에 아쉬움이 많이 남습니다.   
+   
+   
+## 역할 분담
+2261031 신동원 : 개념설계, 자료수집, 앱 코드 개발, 하드웨어 제작, 발표자료 작성, 발표, 깃허브 READ ME 작성   
+2261030 김현우 : 개념설계, 자료수집, 아두이노 알고리즘 개발, 서버 코드 개발, 발표자료 작성, 깃허브 READ ME 작성   
    
 ## references
 
