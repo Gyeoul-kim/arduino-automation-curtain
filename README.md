@@ -385,61 +385,72 @@ ESP8266 작동중일때 돌고있는 함수입니다.
 2-4번은 무조껀 텍스트 글자가 3자여야 하며, 6-7번은 반드시 2자리 숫자가 들어와야 합니다. 다른 번호 또한 자리숫자를 지켜줘야 합니다.    
    
 ## 앱 개발
--설명 순서는 앱 사용시 사용순서와 일치하도록 배치하였습니다.   
--사진의 바로 밑에있는 글이 코드를 설명하는 글입니다.   
-   
+-설명 순서는 앱 사용시 사용순서와 일치하도록 배치하였습니다.     
+     
+### 전역변수 초기값
+뒤에 설명할 함수들에서 사용하는 전역변수의 초기값입니다.   
 ![전역번수](https://user-images.githubusercontent.com/117341089/206365355-f7b39e60-556f-4e3b-bf84-d80a402e4c0f.PNG)   
-전역변수 초기값   
-    
-![메인화면](https://user-images.githubusercontent.com/117341089/206363257-6f0aabe3-1efc-4b48-8e74-2c02c139a65b.PNG)   
-앱 메인 화면  
    
-![연결버튼](https://user-images.githubusercontent.com/117341089/206363602-5c3c2375-76f7-437b-80c0-e82fe0c3738b.PNG)   
+### 앱 메인화면
+앱을 가장 처음에 열면 나오는 메인 화면입니다.   
+![메인화면](https://user-images.githubusercontent.com/117341089/206363257-6f0aabe3-1efc-4b48-8e74-2c02c139a65b.PNG)   
+     
+### 연결버튼    
 주소창에 주소 입력이후 연결 버튼을 누르면 전역변수에 IP주소값이 URL형식으로 값이 들어가게 되고 앱소켓 방식으로 서버와 연결을 시도합니다.   
 이떄 전역변수 PORT값은 아두이노 코드에서 주소에 접근하려는 시도가 있을때 접근의도를 파악하기위해 포트값으로 80(=PORT값)이 있는지 확인합니다.    
-단순하게 PORT값은 웹소켓 방식으로 연결하는데 필요한 값입니다.   
-
-![웹 소켓 연결 상태 표기](https://user-images.githubusercontent.com/117341089/206368728-54a1ab19-2b9f-4bf1-b720-ba5d971b9cf2.PNG)   
-연결 버튼을 누른이후 연결 상태를 메인화면 상태창에 연결 상태를 표기합니다.   
+단순하게 PORT값은 웹소켓 방식으로 연결하는데 필요한 값입니다.    
+![연결버튼](https://user-images.githubusercontent.com/117341089/206363602-5c3c2375-76f7-437b-80c0-e82fe0c3738b.PNG)   
    
-![현재시간 설정](https://user-images.githubusercontent.com/117341089/206715276-31e1f4bf-95cc-4a60-8bf2-fcdd44490430.PNG)      
+### 연결 상태 표기
+연결 버튼을 누른이후 연결 상태를 메인화면 상태창에 연결 상태를 표기합니다.     
+![웹 소켓 연결 상태 표기](https://user-images.githubusercontent.com/117341089/206368728-54a1ab19-2b9f-4bf1-b720-ba5d971b9cf2.PNG)   
+    
+### 현재시간정설정
 연결 성공이후 현재시간을 설정해줘야 합니다.   
 웹소켓 방식으로 텍스트를 보내며 서버에서는 택스트 끝에 2값을 먼져 받아들여 CTI와 전역변수 CURtimeH(현재:시), CURtimeM(현재:분) 값만 읽고 저장합니다.    
 IF문으로 시간값과 분값이 한자리수로 입력받으면 값 앞에 0을 넣어 통신 규격을 맞췄습니다. ex) 1시 5분 설정 >> 01시 05분 형태로 전송   
-     
-![반환 데이터 진행 표기](https://user-images.githubusercontent.com/117341089/206371215-4ea7866d-eafa-4905-ba25-92b7092c14fa.PNG)     
+![현재시간 설정](https://user-images.githubusercontent.com/117341089/206715276-31e1f4bf-95cc-4a60-8bf2-fcdd44490430.PNG)      
+   
+### 서버 반환 데이터 표기
 서버는 동작 명령을 받고 텍스트를 읽어 해당동작에 해당하는 텍스트를 앱으로 반환합니다.    
 OPN,CLS,TIM값을 반환하며 앱은 받은 텍스트를 IF문으로 받아들여 현제 동작상태를 상태표기창에 표기합니다.   
-   
-![속도설정](https://user-images.githubusercontent.com/117341089/206715037-c4b46995-c60b-42ed-8dd3-aee79f87b68a.PNG)    
+![반환 데이터 진행 표기](https://user-images.githubusercontent.com/117341089/206371215-4ea7866d-eafa-4905-ba25-92b7092c14fa.PNG)     
+    
+### 동작 속도 설정
 속도설정 버튼을 클릭하면 1단계 = 값1, 2단계 = 값2, 3단계 = 값3 방식으로 값을 SPEED에 저장합니다.    
+![속도설정](https://user-images.githubusercontent.com/117341089/206715037-c4b46995-c60b-42ed-8dd3-aee79f87b68a.PNG)    
+속도가 변경되었음을 보여주기 위해서 버튼 클릭이후 사용자에서 피드백을 바로 보여주는 화면을 만들어 속도변경을 인지하도록 만들었습니다.       
 ![속도설정 피드백](https://user-images.githubusercontent.com/117341089/206369974-f2f6be9f-b39f-423f-ac92-84064370ef7a.PNG)    
-속도가 변경되었음을 보여주기 위해서 버튼 클릭이후 사용자에서 피드백을 바로 보여주는 화면을 만들어 속도변경을 인지하도록 만들었습니다.   
    
-![BtnON](https://user-images.githubusercontent.com/117341089/206371777-4009a2e7-594c-4e60-b78b-447f9f6aaf55.PNG)
-![BtnOFF](https://user-images.githubusercontent.com/117341089/206371784-1b5d8494-5584-4407-a151-588b69e11d8f.PNG)   
+### 열기/닫기 버튼   
 열기/닫기 버튼을 누를경우 동작하는 함수입니다.   
 서버는 텍스트 맨 끝에 0값을 먼져 읽고 맨앞에 SPEED값과 OPN또는CLS 값을 읽고 해당 요청을 수행합니다.   
 뒤에있는 전역변수값은 서버에서 무시하기에 어떠한 값이 들어가도 상관없습니다.   
-열기/닫기 버튼을 클릭했음을 사용자에게 알리기 위해 소리 피드백을 추가하였습니다. BBI-TONG 이라는 소리가 납니다.   
+열기/닫기 버튼을 클릭했음을 사용자에게 알리기 위해 소리 피드백을 추가하였습니다. BBI-TONG 이라는 소리가 납니다. 
+![BtnON](https://user-images.githubusercontent.com/117341089/206371777-4009a2e7-594c-4e60-b78b-447f9f6aaf55.PNG)
+![BtnOFF](https://user-images.githubusercontent.com/117341089/206371784-1b5d8494-5584-4407-a151-588b69e11d8f.PNG)   
    
-![BtnSTOP](https://user-images.githubusercontent.com/117341089/206372448-16fbe6f0-3e57-4f7c-a12d-e9c4f1f40e2e.PNG)   
-정지버튼을 누를경우 동작하는 함수입니다.
+### 정지 버튼
+정지버튼을 누를경우 동작하는 함수입니다.   
 모든 동작을 정지하도록 명령을 보내기에 서버에서는 0값을 먼저 읽고 앞에 SPEED값과 STP 텍스트만 읽고 기기에 동작을 정지합니다.   
 정지 버튼을 클릭했음을 사용자에게 알리기 위해 소리 피드백을 추가하였으며 열기/닫기와는 다른 BBI-BBI 소리가 나도록 설정하여 열기/닫기와 다른 정지 기능을 사용했음을 사용자에게 분간할 수 있도록 하였습니다.   
-    
-![OPEN루틴설정](https://user-images.githubusercontent.com/117341089/206715569-fb0db0a8-cae5-4d60-b164-56b804ad6087.PNG)
-![CLOSE루틴설정](https://user-images.githubusercontent.com/117341089/206715573-0610f949-0bee-4ae8-b957-446eb594f538.PNG)    
+![BtnSTOP](https://user-images.githubusercontent.com/117341089/206372448-16fbe6f0-3e57-4f7c-a12d-e9c4f1f40e2e.PNG)   
+   
+### 루틴 설정 
 루틴 설정을 위해 버튼을 클릭하면 시간 설정 화면이 나옵니다.   
 시간 설정이후 사용자가 설정한 시간값을 화면에 표기합니다.  
 이후 전역변수에 설정한 시간값을 저장합니다. IF문을 통해 시간은 5분 단위로만 설정할 수 있도록 재한하였습니다.  
 추가적인 IF문으로 시간값과 분값이 한자리수로 입력받으면 값 앞에 0을 넣어 통신 규격을 맞췄습니다. ex) 1시 5분 설정 >> 01시 05분 형태로 전송    
+![OPEN루틴설정](https://user-images.githubusercontent.com/117341089/206715569-fb0db0a8-cae5-4d60-b164-56b804ad6087.PNG)
+![CLOSE루틴설정](https://user-images.githubusercontent.com/117341089/206715573-0610f949-0bee-4ae8-b957-446eb594f538.PNG)    
+   
     
+5분 단위가 아닐경우 5분으로 설정하도록 툴팁을 만들었습니다. 
 ![루틴설정화면](https://user-images.githubusercontent.com/117341089/206374695-e0f10afa-f693-4a4d-996d-41b90f0c5832.PNG)
 ![루틴시간설정툴팁](https://user-images.githubusercontent.com/117341089/206374700-0ed06940-43e1-4aff-9c66-bfdcff3d617d.PNG)   
-5분 단위가 아닐경우 5분으로 설정하도록 툴팁을 만들었습니다.   
 전역변수를 성공적으로 설정하면 서버는 텍스트 맨뒤의 1값으 먼저 읽고 앞에 TIM 텍스트와 뒤에 나머지 4개의 전역변수 값을 읽고 서버에 저장합니다.   
 이후 서버에 저장되어있는 현재시간 값과 루틴설정으로 만든 시간값이 일치하면 열기/닫기 동작을 수행합니다.   
+   
    
 ## 하드웨어 제작 / 시제품 제작   
    
@@ -459,22 +470,38 @@ SketchUp 무료툴을 사용해 제작한 초기형 모델입니다.
 ![시제품 완성](https://user-images.githubusercontent.com/117341089/206667713-ef3639a9-a3af-4ed4-b57a-be0ea232816a.PNG)   
 초기형 3D 모델을 토대로 만든 시제품입니다.   
    
-## 앱 사용방법   
-![순서 1-1](https://user-images.githubusercontent.com/117341089/206723549-63dbe499-cd61-44a9-9f7d-cde2b3a6efaf.png)   
-1.아두이노 프로그램의 시리얼 모니터상에 뜨는 인터넷의 IP주소를 주소란(1번 칸)에 입력합니다.   
-2.입력이 끝났으면 확인(2번 칸)을 눌러줍니다.   
+## 앱 사용방법(초기 설정법)    
+
+### 1. 와이파이 연결 통일화
+1.서버를 만든 와이파이와 휴대폰에 연결된 와이파이를 동일하게 설정하여 줍니다.   
+<img width="444" alt="코드 와이파이 이름 페스워드" src="https://user-images.githubusercontent.com/117341089/207755075-5802d250-0f90-4ed3-af02-4ea3068b33a1.png">       
    
+동일한 와이파이에 접속   
+![휴대폰 와이파이 패스워드](https://user-images.githubusercontent.com/117341089/207753096-89d2582d-b010-4f1d-b9dd-154be67dbcda.png)
+![휴대폰 와이파이 연결성공](https://user-images.githubusercontent.com/117341089/207753107-cb7420a8-92ba-4cbe-a72e-97553a828c4e.png)    
+   
+### 2. IP주소 입력
+<img width="287" alt="IP주소" src="https://user-images.githubusercontent.com/117341089/207750888-db2a4483-c339-48cc-9a0b-9c55f887e717.png">   
+   
+2-1.아두이노 프로그램의 시리얼 모니터상에 뜨는 인터넷의 IP주소를 주소란(1번 칸)에 입력합니다.   
+2-2.입력이 끝났으면 확인(2번 칸)을 눌러줍니다.   
+![순서 1-1](https://user-images.githubusercontent.com/117341089/206723549-63dbe499-cd61-44a9-9f7d-cde2b3a6efaf.png)       
+   
+### 3. 연결 여부 확인
 ![순서 2](https://user-images.githubusercontent.com/117341089/206723558-e9d41b1e-de75-4be6-b25f-1f8dea094303.png)   
-3.연결에 성공하면 상태창에 연결이 성공되었음을 알립니다.   
+3-1.연결에 성공하면 상태창에 연결이 성공되었음을 알립니다.   
 만약 연결에 실패하면 연결 실패 텍스트가 나옵니다.   
+### 4. 현재시간 설정
 ![순서 3](https://user-images.githubusercontent.com/117341089/206723565-9a6152d6-42cf-4478-87e0-5eccba79e7ba.png)   
-4.연결에 성공하였다면 현재시간을 설정해줘야 합니다.    
+4-1.연결에 성공하였다면 현재시간을 설정해줘야 합니다.    
 현재시간설정 버튼을 클릭합니다.    
 ![순서 4](https://user-images.githubusercontent.com/117341089/206723571-9e8541f7-a083-4584-8a29-5f36c46cb489.png)   
-5.시간설정창이 뜨면 추가적인 조작 없이 바로 확인을 눌러줍니다.   
+4-2.시간설정창이 뜨면 추가적인 조작 없이 바로 확인을 눌러줍니다.   
 시간설정창은 처음에 현재시각을 기준으로 띄우기 떄문에 바로 확인을 눌러주면 됩니다.   
     
+    
 이로써 앱 초기 설정이 끝납니다.   
+아두이노에 전원이 꺼지거나 공유기의 전원이 꺼진 경우가 아니라면 초기설정은 1번 만 해주면 됩니다.
 이후에는 앱 조작을 하셔도 괜찮습니다.   
 툴팁은 "사용방법" 버튼으로도 확인할 수 있습니다.   
    
