@@ -1,5 +1,8 @@
 # arduino IoT curtain
+## 공지 / Announcements 
+본 레포지토리는 2022학년도 배재대학교 창의공학설계 과목이 종강함에 따라 아카이브 처리 되었습니다.
 
+This repository was archived as the creative engineering design at Paichai University ended in 2022.
 ## KR   
 배재대학교 2022학번 AI소프트웨어공학부 컴퓨터공학전공   
 창의공학설계 08분반 팀 31 프로젝트   
